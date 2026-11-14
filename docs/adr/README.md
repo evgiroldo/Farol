@@ -1,0 +1,21 @@
+# Architecture Decision Records
+
+| # | Decision | Status |
+|---|---|---|
+| [0000](0000-record-architecture-decisions.md) | Record architecture decisions | Accepted |
+| [0001](0001-original-clean-room-implementation.md) | Original, clean-room implementation | Accepted |
+| [0002](0002-name-and-license.md) | Name "Farol" and GPLv3 license | Accepted |
+| [0003](0003-product-positioning.md) | Product positioning: prove causes, for everyone | Accepted |
+| [0004](0004-platform-and-minimum-os.md) | macOS only, Apple silicon, macOS 26+ | Accepted |
+| [0005](0005-milestones.md) | Milestones | Accepted |
+| [0006](0006-ui-and-code-architecture.md) | UI and code architecture | Accepted |
+| [0007](0007-security-model.md) | Security model: least privilege | Accepted |
+| [0008](0008-private-apis.md) | Private APIs, isolated and read-only | Accepted |
+| [0009](0009-zero-network.md) | Zero network access | Accepted |
+| [0010](0010-causal-attribution-and-proof-by-pause.md) | Causal attribution: suspects by correlation, proof by pause | Accepted |
+| [0011](0011-always-on-menu-bar-sentinel.md) | Always-on sentinel in the menu bar | Accepted |
+| [0012](0012-proactive-alerts.md) | Proactive alerts on by default | Accepted |
+| [0013](0013-history-privacy.md) | History privacy | Accepted |
+| [0014](0014-distribution-and-tooling.md) | Distribution, build and quality tooling | Accepted |
+| [0015](0015-documentation-language.md) | English for code and docs; app in English and Portuguese | Accepted |
+| [0016](0016-on-device-ai.md) | On-device AI for explanations | Deferred |

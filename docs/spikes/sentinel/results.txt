@@ -1,0 +1,13 @@
+[   31s] modo=repouso   CPU=0.117% de um núcleo  memória=12.5 MB  wakeups=2.1/s  energia=2.97 mW
+[   63s] modo=repouso   CPU=0.008% de um núcleo  memória=12.5 MB  wakeups=0.8/s  energia=0.01 mW
+[   95s] modo=repouso   CPU=0.006% de um núcleo  memória=12.5 MB  wakeups=0.8/s  energia=0.00 mW
+[  127s] modo=repouso   CPU=0.006% de um núcleo  memória=12.5 MB  wakeups=0.6/s  energia=0.00 mW
+[  135s] INCIDENTE: 3.1 núcleos ocupados (normal 0.9)
+[  159s] modo=incidente CPU=0.314% de um núcleo  memória=13.2 MB  wakeups=1.7/s  energia=3.17 mW
+[  177s] fim do incidente (42 amostras detalhadas guardadas)
+[  183s] INCIDENTE: 3.2 núcleos ocupados (normal 1.2)
+[  189s] modo=incidente CPU=0.561% de um núcleo  memória=14.0 MB  wakeups=4.4/s  energia=3.14 mW
+[  215s] fim do incidente (60 amostras detalhadas guardadas)
+[  219s] modo=repouso   CPU=0.620% de um núcleo  memória=14.2 MB  wakeups=2.5/s  energia=0.71 mW
+[  249s] modo=repouso   CPU=0.007% de um núcleo  memória=14.2 MB  wakeups=0.8/s  energia=0.00 mW
+incidentes: 2

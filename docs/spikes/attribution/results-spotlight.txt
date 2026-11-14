@@ -1,0 +1,19 @@
+daemons: ["WindowServer": 423, "mds_stores": 610]  coletando 40 s…
+custo do amostrador: 1.20% de um núcleo (incl. /bin/ps)
+
+== WindowServer: 37.7% CPU médio no período
+  r=+0.70  loginwindow (12129)  0.4 s CPU
+  r=+0.70  UniversalControl (12202)  0.2 s CPU
+  r=+0.61  Dock (12184)  0.2 s CPU
+  r=+0.60  Claude (16918)  1.2 s CPU
+  r=+0.52  Vorssaint (12347)  1.3 s CPU
+
+== mds_stores: 11.9% CPU médio no período
+  r=+0.89  Claude Helper (16924)  0.5 MB gravados
+  r=+0.29  farol-write (19519)  214.5 MB gravados
+  r=+0.01  replayd (12229)  0.0 MB gravados
+  r=-0.01  spotlightknowledged.updater (14468)  0.0 MB gravados
+  r=-0.01  duetexpertd (12178)  0.0 MB gravados
+
+== Teste de causa (pausa de 3 s em cada suspeito)
+  mds_stores ← pausar farol-write: 51.7% → 0.3% (queda de 99%)

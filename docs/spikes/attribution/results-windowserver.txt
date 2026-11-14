@@ -1,0 +1,20 @@
+daemons: ["WindowServer": 423, "mds_stores": 610]  coletando 40 s…
+custo do amostrador: 0.71% de um núcleo (incl. /bin/ps)
+
+== WindowServer: 0.6% CPU médio no período
+  r=+0.53  farol-burn-sync (19442)  20.2 s CPU
+  r=+0.52  farol-render (19440)  20.3 s CPU
+  r=+0.30  iconservicesagent (12223)  0.0 s CPU
+  r=+0.23  Vorssaint (12347)  0.0 s CPU
+  r=+0.21  jetpackassetd (12386)  0.0 s CPU
+
+== mds_stores: 0.2% CPU médio no período
+  r=+0.38  Claude (16918)  0.0 MB gravados
+  r=+0.04  mediaanalysisd (12249)  12.3 MB gravados
+  r=+0.04  knowledgeconstructiond (12259)  45.9 MB gravados
+  r=-0.07  cfprefsd (1175)  0.0 MB gravados
+  r=-0.08  Claude Helper (16924)  0.5 MB gravados
+
+== Teste de causa (pausa de 3 s em cada suspeito)
+  WindowServer ← pausar farol-burn-sync: 0.7% → 0.7% (queda de -0%)
+  WindowServer ← pausar farol-render: 2.7% → 1.0% (queda de 63%)
