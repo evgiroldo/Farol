@@ -1,6 +1,6 @@
 # 0003. Product positioning: prove causes, for everyone
 
-- Status: Accepted; wording of the promise amended by ADR 0020
+- Status: Accepted; wording of the promise amended by ADR 0020; provable symptoms listed in ADR 0023; first screen defined by ADR 0031
 - Date: 2026-11-14
 
 ## Context

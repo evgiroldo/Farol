@@ -1,6 +1,6 @@
 # 0017. Two processes: sentinel and app
 
-- Status: Accepted (amends the "one process" part of ADR 0011)
+- Status: Accepted (amends the "one process" part of ADR 0011); communication amended by ADR 0025
 - Date: 2026-11-14
 
 ## Context

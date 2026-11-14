@@ -2,68 +2,94 @@
 
 **Why is your Mac slow? Farol tells you which app is causing it — and shows the proof.**
 
-Farol is a free, open-source app for Macs with Apple silicon. When your Mac feels slow, freezes, gets hot or drains the battery, open Farol and it tells you, in plain words, what is going on and what to do about it.
+Farol is a free, open-source app for Macs with Apple silicon. When your Mac feels slow, freezes, gets hot or runs out of space, open Farol: it tells you in plain words what is causing it, and gives you one button to fix it. You don't need to know anything about processes, CPU or memory.
 
-> Status: early development — there is nothing to install yet. Follow the repository to hear when the first version is ready.
+*Farol* means *lighthouse* in Portuguese.
+
+> **Status:** in development — there is nothing to install yet. The design is complete and its core is being measured and validated. Watch or star the repository to hear when the first version is ready.
 
 ## How it works
 
-1. **It quietly keeps watch.** A tiny helper in the menu bar notices when your Mac starts working harder than usual and keeps a short record of what was running. It uses almost no battery or memory.
-2. **You ask "why?".** Open Farol and it shows a short answer first — for example: *"Your Mac is slow because Photos is analyzing your library. It should finish in about 20 minutes."* The details and graphs are there if you want them.
-3. **It checks before it blames.** When an app looks guilty, Farol can pause it for a moment (only if you agree) and watch whether the Mac calms down. That way it shows evidence instead of guessing.
+1. **It quietly keeps watch.** A tiny helper in the menu bar notices when your Mac starts working harder than usual and keeps a short record of what was running — so Farol can explain a slowdown even after it's over.
+2. **You open Farol and see the answer first.** One card, one sentence, one button. For example:
+   - *"Chrome is slowing down your Mac."* → **Fix** — Farol restarts Chrome the normal way (it asks you to save anything first, and your tabs come back).
+   - *"Your Mac is organizing your photos."* → It explains that this is normal after adding many photos, and offers to tell you if it goes on for too long.
+3. **When Farol isn't sure, it checks before it blames.** Sometimes an app makes *macOS* work harder — for example, by making the system redraw the screen all the time. Then Farol says *"Slack may be slowing down your Mac. We're not sure yet."* and offers **Pause to confirm**: with your OK, it pauses the app three times for 3 seconds (about 40 seconds in total) and watches whether your Mac calms down. Nothing is closed. If it's confirmed, you get the Fix button; if the result is unclear, Farol says so.
 
-Sometimes the honest answer is "nothing is wrong, this is normal and will end soon" — and Farol will say so.
+Graphs, numbers and process lists are still there under **Details**, for anyone who wants them.
 
-## What makes it different
+## Why it's different
 
-- **Finds the app behind the slowdown.** On a Mac, the process using the most power is often just doing work *for* another app (for example, the system that draws the screen or the one that indexes files for search). Farol tries to trace that work back to the app that caused it.
-- **Shows evidence, not guesses.** Every answer comes with how sure Farol is — or says "not sure" when the data is not enough. (Early prototypes showed the idea can work; the method is still being validated, see [ADR 0019](docs/adr/0019-corrections-after-first-review.md).)
-- **Remembers what you missed.** If the Mac was slow two minutes ago and is fine now, Farol can still tell you what happened.
-- **Settles debates with your own data** *(planned)*. Guided tests such as "does Safari really save battery compared to Chrome — on my Mac, with my use?"
-- **Honest numbers.** Every value is labeled *measured*, *estimated* or *inferred*; missing data is shown as missing, never invented.
-- **Lighter than the problem it diagnoses.** See the targets below.
+- **It fixes, it doesn't just show.** Most monitors give you a wall of numbers. Farol gives you the cause and one safe action.
+- **It finds the app behind the slowdown.** On a Mac, the process using the most power is often just working *for* another app — like the system that draws the screen, or the one that indexes files for search. Farol traces that work back to the app that caused it.
+- **It shows evidence, not guesses.** Every answer says how sure Farol is. Suspicions are never presented as facts, and its automatic alerts only state things it measured directly.
+- **It looks ahead.** It warns you before your disk fills up ("at this rate, your disk will be full in 12 days").
+- **It's lighter than the problem it diagnoses.** The menu bar helper is designed to use a tiny fraction of your Mac (see the targets below).
 
-Some problems cannot be tested by pausing an app — an overheating Mac, too little memory, a full disk, or work done by macOS itself. For those, Farol explains what it sees instead of claiming proof.
+Some problems can't be tested by pausing an app — heat, too little memory, a full disk, or work macOS does on its own. For those, Farol explains what it sees and what you can do, without claiming proof.
 
-## Principles
+## Is it safe?
 
-| | |
-|---|---|
-| **Privacy** | Zero network access. Nothing leaves your Mac. History is minimal, local, excluded from backups and deletable. |
-| **Security** | Nothing runs as root. Hardened Runtime. No third-party dependencies. Release builds will be reproducible from public commits with signed provenance. |
-| **Performance** | Resource budgets will be enforced in CI and checked on real hardware before each release. |
+- **Farol never closes or pauses anything without asking you.** Fix restarts an app the normal way, so you're asked to save your work.
+- **No pausing during calls.** If any app is using the microphone, Farol doesn't run its pause test, and it never pauses system apps like Finder or Dock.
+- **Paused apps always come back.** A separate safety helper resumes them even if Farol itself crashes.
+- **Nothing runs with administrator rights.**
 
-### Resource budget targets
+## Privacy
 
-Targets, pending measurement with the real sentinel ([ADR 0019](docs/adr/0019-corrections-after-first-review.md)). This table is the single source of truth.
-
-| Process | State | CPU (of one core) | Memory |
-|---|---|---|---|
-| Sentinel (menu bar) | Idle | < 0.1% | < 15 MB |
-| Sentinel (menu bar) | Recording an incident | < 1% | < 15 MB |
-| Farol app | Window open, updating every second | < 1% | < 60 MB |
-
-Monitoring runs at low priority (`utility`/`background` QoS), which keeps it mostly on the efficiency cores.
+- **Farol never connects to the internet.** Everything stays on your Mac.
+- **You can choose to help improve Farol** by sharing an anonymous report. You see its full content first and send it yourself, through your browser. It never contains your name, files, exact times or anything that could identify you.
+- The short history of slowdowns stays on your Mac, is excluded from backups, is kept for 7 days, and can be deleted at any time.
 
 ## Requirements
 
-- Mac with Apple silicon (M1 or later)
+- A Mac with Apple silicon (M1 or later)
 - macOS 26 or later
+- Interface in English and Brazilian Portuguese
 
 ## Roadmap
 
-1. **M1 — Foundation:** low-cost sampler, incident-triggered history, processes and performance views, menu bar sentinel.
-2. **M2 — Finding the cause:** ranking the likely apps and testing them with a short pause.
-3. **M3 — Energy & thermals:** power and temperature sensors.
-4. **M4 — Experiments:** guided A/B tests.
+**Version 1.0** ([ADR 0029](docs/adr/0029-scope-of-version-1.md), [ADR 0031](docs/adr/0031-solve-dont-show.md)):
+- The menu bar helper with alerts and a short history of slowdowns.
+- The answer-first window with the Fix and Pause to confirm buttons.
+- Cause testing for the two classic cases: the system process that draws the screen (WindowServer) and the one that indexes files for search (Spotlight).
+- Heat, battery and free-space information, including the "disk full in N days" warning.
+- Plain explanations of about 20 common macOS processes.
+- "Was this helpful?" after every fix, and optional anonymous reports.
 
-## Contributing
+**After 1.0**, in an order chosen with user feedback: detailed power and temperature sensors, personal A/B tests ("does Safari really save battery compared to Chrome, on my Mac?"), Siri and Shortcuts, a report you can send to someone helping you, and cause testing for more system processes.
 
-Read the [architecture decision records](docs/adr/) to understand why things are the way they are. Security issues: see [SECURITY.md](SECURITY.md).
+---
+
+## For developers
+
+Farol is written in Swift for macOS 26+, with **no third-party dependencies**. Every architectural decision — and every correction after independent reviews — is recorded in the [architecture decision records](docs/adr/). Prototypes used as evidence are in [`docs/spikes/`](docs/spikes/).
+
+| Principle | In practice |
+|---|---|
+| Privacy | No networking code in Farol at all; a CI check will enforce it. |
+| Security | No root, no privileged helper, Hardened Runtime; history treated as untrusted input. Release builds will be reproducible from public commits with signed provenance. See [SECURITY.md](SECURITY.md). |
+| Performance | Resource budgets checked in CI and on real hardware before each release. |
+
+### Resource budget targets
+
+Provisional. A 24-hour measurement with every part of the real helper is running now; the final numbers will come from it ([ADR 0028](docs/adr/0028-budget-policy.md)). This table is the single source of truth.
+
+| Process | State | CPU (of one core) | Memory |
+|---|---|---|---|
+| Menu bar helper | Idle | < 0.1% | measured peak + 20%, at most 25 MB |
+| Menu bar helper | Recording a slowdown | < 1% | same as idle |
+| Farol app | Window open, updating every second | < 1% | < 60 MB |
+
+Monitoring runs at low priority, which keeps it mostly on the efficiency cores.
+
+### Build and test
 
 ```bash
 cd FarolCore && swift test
 ```
+
+Security issues: please report them privately, as described in [SECURITY.md](SECURITY.md).
 
 ## License
 

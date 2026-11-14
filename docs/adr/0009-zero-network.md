@@ -1,6 +1,6 @@
 # 0009. Zero network access
 
-- Status: Accepted
+- Status: Accepted; clarified by ADR 0036
 - Date: 2026-11-14
 
 ## Context

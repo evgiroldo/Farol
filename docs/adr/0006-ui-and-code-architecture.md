@@ -1,6 +1,6 @@
 # 0006. UI and code architecture
 
-- Status: Accepted; amended by ADR 0019
+- Status: Accepted; amended by ADR 0019; first screen defined by ADR 0031
 - Date: 2026-11-14
 
 ## Context
