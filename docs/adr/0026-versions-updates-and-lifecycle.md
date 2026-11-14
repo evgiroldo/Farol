@@ -1,6 +1,6 @@
 # 0026. Versions, updates and the sentinel's lifecycle
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0035
 - Date: 2026-11-14
 
 ## Context

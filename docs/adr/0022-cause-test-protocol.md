@@ -1,6 +1,6 @@
 # 0022. Cause test protocol: repeated pause and resume
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0033
 - Date: 2026-11-14
 - Amends: 0010 (a single 3-second pause is no longer the proof)
 

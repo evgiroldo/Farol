@@ -1,6 +1,6 @@
 # 0025. App–sentinel communication over XPC
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0035
 - Date: 2026-11-14
 - Amends: 0017 ("no XPC is needed in M1")
 

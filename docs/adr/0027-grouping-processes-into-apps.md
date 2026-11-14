@@ -1,6 +1,6 @@
 # 0027. Grouping processes into apps
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0034
 - Date: 2026-11-14
 
 ## Context

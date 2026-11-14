@@ -17,9 +17,9 @@ You will receive an acknowledgement as soon as possible. Fixes for confirmed iss
 ## Security model (summary)
 
 - **No root.** Farol and its menu bar sentinel run as the logged-in user. There is no privileged helper.
-- **No network.** Farol never opens a network connection. Updates come through Homebrew or GitHub Releases.
+- **No network.** Farol never opens a network connection. Updates come through Homebrew or GitHub Releases. Anonymous reports are reviewed and sent by the user through their own browser (ADR 0036).
 - **Least privilege.** Hardened Runtime is enabled; entitlements are limited to what is strictly needed.
-- **Process control is opt-in.** Pausing a process requires explicit confirmation for every test, applies only to the user's own processes, lasts a few seconds, never targets protected processes, re-verifies the process right before and after acting, and is always resumed by a watchdog. macOS offers no race-free process handle, so a very small window between verification and signal remains.
+- **Process control is opt-in.** Pausing an app requires explicit confirmation for every test, applies only to the user's own processes and only to executables inside the app's own bundle, lasts 3 seconds at a time, never runs while any app is using the microphone, never targets protected processes, and re-verifies each process right before and after acting. A separate watchdog resumes everything at once if Farol crashes; if both crash, Farol offers to resume frozen apps the next time it opens. macOS offers no race-free process handle, so a very small window between verification and signal remains (ADRs 0023, 0034).
 - **Private APIs are read-only and isolated.** Sensors that rely on undocumented macOS interfaces live in a separate module and fail closed ("unavailable").
 - **No third-party dependencies.** Only Apple frameworks are used.
 - **Verifiable builds.** Official releases will be built by GitHub Actions from public commits and ship with signed build provenance (`gh attestation verify`).

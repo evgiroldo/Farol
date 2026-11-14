@@ -1,6 +1,6 @@
 # 0018. Bundle identifier, history store and retention
 
-- Status: Accepted; amended by ADR 0019
+- Status: Accepted; amended by ADR 0019; amended by ADR 0032
 - Date: 2026-11-14
 
 ## Decision

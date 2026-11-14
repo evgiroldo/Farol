@@ -1,6 +1,6 @@
 # 0023. Pause safety and the limits of proof
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0034
 - Date: 2026-11-14
 - Amends: 0010 (protected list and watchdog), 0003 (which symptoms are provable)
 
