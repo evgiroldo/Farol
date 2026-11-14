@@ -1,6 +1,6 @@
 # 0005. Milestones
 
-- Status: Accepted (supersedes the initial scope of processes → energy → recording)
+- Status: Superseded by ADR 0029
 - Date: 2026-11-14
 
 ## Context

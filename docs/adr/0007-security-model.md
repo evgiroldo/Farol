@@ -1,6 +1,6 @@
 # 0007. Security model: least privilege
 
-- Status: Accepted
+- Status: Accepted; cost of `/bin/ps` amended by ADR 0021
 - Date: 2026-11-14
 
 ## Context

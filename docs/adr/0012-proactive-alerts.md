@@ -1,6 +1,6 @@
 # 0012. Proactive alerts on by default
 
-- Status: Accepted
+- Status: Accepted; content and frequency rules in ADR 0024
 - Date: 2026-11-14
 
 ## Context

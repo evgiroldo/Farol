@@ -52,10 +52,13 @@ Monitoring runs at low priority (`utility`/`background` QoS), which keeps it mos
 
 ## Roadmap
 
-1. **M1 — Foundation:** low-cost sampler, incident-triggered history, processes and performance views, menu bar sentinel.
-2. **M2 — Finding the cause:** ranking the likely apps and testing them with a short pause.
-3. **M3 — Energy & thermals:** power and temperature sensors.
-4. **M4 — Experiments:** guided A/B tests.
+**Version 1.0** ([ADR 0029](docs/adr/0029-scope-of-version-1.md)):
+- The menu bar helper with alerts and a short history of slowdowns.
+- A window that gives the answer first, with processes and performance views underneath.
+- Cause testing for the two classic cases: the system process that draws the screen (WindowServer) and the one that indexes files for search (Spotlight).
+- Heat and battery information, and plain explanations of about 20 common macOS processes, in English and Portuguese.
+
+**After 1.0**, in an order chosen with user feedback: detailed power and temperature sensors, personal A/B experiments, Siri and Shortcuts, a shareable report, and cause testing for more system processes.
 
 ## Contributing
 
