@@ -1,6 +1,6 @@
 # 0006. UI and code architecture
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0019
 - Date: 2026-11-14
 
 ## Context

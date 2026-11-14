@@ -1,6 +1,6 @@
 # 0003. Product positioning: prove causes, for everyone
 
-- Status: Accepted
+- Status: Accepted; wording of the promise amended by ADR 0020
 - Date: 2026-11-14
 
 ## Context
