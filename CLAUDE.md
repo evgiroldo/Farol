@@ -1,6 +1,6 @@
 # Farol — guide for Claude sessions
 
-Farol is an open-source (GPLv3) macOS system monitor: "the Mac monitor that finds the real culprit — and proves it". Read `README.md`, then `docs/adr/README.md` before changing anything architectural.
+Farol is an open-source (GPLv3) macOS app that tells people why their Mac is slow and which app is causing it, with evidence (ADR 0020). Read `README.md`, then `docs/adr/README.md` before changing anything architectural.
 
 ## How we work
 
@@ -39,3 +39,7 @@ Format with `xcrun swift-format format -i -r FarolCore/Sources FarolCore/Tests` 
 - `FarolCore/` — Swift package, measurement only, no UI (ADR 0006).
 - `docs/adr/` — architecture decision records.
 - `docs/spikes/` — throwaway prototypes kept as evidence; never copy them into the app.
+
+## Writing for users
+
+User-facing text (README, app UI, alerts) is for people who are not technical (ADR 0020): start from the symptom ("your Mac is slow"), avoid jargon and rare words, explain any technical term the first time, and keep technical detail one level down.

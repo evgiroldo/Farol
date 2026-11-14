@@ -5,7 +5,7 @@
 | [0000](0000-record-architecture-decisions.md) | Record architecture decisions | Accepted |
 | [0001](0001-original-clean-room-implementation.md) | Original, clean-room implementation | Accepted |
 | [0002](0002-name-and-license.md) | Name "Farol" and GPLv3 license | Accepted |
-| [0003](0003-product-positioning.md) | Product positioning: prove causes, for everyone | Accepted |
+| [0003](0003-product-positioning.md) | Product positioning: prove causes, for everyone | Wording amended by 0020 |
 | [0004](0004-platform-and-minimum-os.md) | macOS only, Apple silicon, macOS 26+ | Accepted |
 | [0005](0005-milestones.md) | Milestones | Accepted |
 | [0006](0006-ui-and-code-architecture.md) | UI and code architecture | Amended by 0019 |
@@ -22,3 +22,4 @@
 | [0017](0017-two-process-model.md) | Two processes: sentinel and app | Accepted |
 | [0018](0018-identity-history-store-retention.md) | Bundle identifier, history store and retention | Amended by 0019 |
 | [0019](0019-corrections-after-first-review.md) | Corrections after the first independent review | Accepted |
+| [0020](0020-plain-language-positioning.md) | Plain-language positioning | Accepted |
