@@ -1,6 +1,6 @@
 # Security Policy
 
-Farol can see every process on a Mac and, with the user's confirmation, can pause the user's own processes. Security is a core requirement, not a feature.
+Farol can see every process on a Mac and, with the user's confirmation, will be able to pause the user's own processes. Security is a core requirement, not a feature.
 
 ## Reporting a vulnerability
 
@@ -19,9 +19,15 @@ You will receive an acknowledgement as soon as possible. Fixes for confirmed iss
 - **No root.** Farol and its menu bar sentinel run as the logged-in user. There is no privileged helper.
 - **No network.** Farol never opens a network connection. Updates come through Homebrew or GitHub Releases.
 - **Least privilege.** Hardened Runtime is enabled; entitlements are limited to what is strictly needed.
-- **Process control is opt-in.** Pausing a process requires explicit confirmation for every proof, applies only to the user's own processes, lasts at most 3 seconds, never targets protected processes, and is always resumed by a watchdog.
+- **Process control is opt-in.** Pausing a process requires explicit confirmation for every test, applies only to the user's own processes, lasts a few seconds, never targets protected processes, re-verifies the process right before and after acting, and is always resumed by a watchdog. macOS offers no race-free process handle, so a very small window between verification and signal remains.
 - **Private APIs are read-only and isolated.** Sensors that rely on undocumented macOS interfaces live in a separate module and fail closed ("unavailable").
 - **No third-party dependencies.** Only Apple frameworks are used.
-- **Verifiable builds.** Official releases are built by GitHub Actions from public commits and ship with signed build provenance (`gh attestation verify`).
+- **Verifiable builds.** Official releases will be built by GitHub Actions from public commits and ship with signed build provenance (`gh attestation verify`).
+
+## What the history protection does and does not cover
+
+- The history lives in `~/Library/Application Support/Farol/`, with permissions that **keep other user accounts out** (directory `0700`, files `0600`). It is excluded from Time Machine backups.
+- Permissions do **not** protect it from other software running under **your own account**: any non-sandboxed app you run can read or modify it. Farol therefore treats the history file as untrusted input — invalid rows are skipped, reads are bounded, the schema is not trusted, and nothing read from the file is ever used to act on a process.
+- **Delete history** removes the data from Farol's files (database, WAL and shared-memory files). It cannot remove copies in APFS snapshots or in backups made before you installed Farol.
 
 The full reasoning behind each item is documented in [`docs/adr/`](docs/adr/).

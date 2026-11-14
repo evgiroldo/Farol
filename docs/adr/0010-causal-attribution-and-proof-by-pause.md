@@ -1,6 +1,6 @@
 # 0010. Causal attribution: suspects by correlation, proof by pause
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0019
 - Date: 2026-11-14
 
 ## Context

@@ -1,6 +1,6 @@
 # 0008. Private APIs, isolated and read-only
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0019
 - Date: 2026-11-14
 
 ## Context

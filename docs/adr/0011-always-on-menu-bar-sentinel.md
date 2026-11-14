@@ -1,6 +1,6 @@
 # 0011. Always-on sentinel in the menu bar
 
-- Status: Accepted
+- Status: Accepted; process model amended by ADR 0017; budgets amended by ADR 0019
 - Date: 2026-11-14
 
 ## Context
