@@ -1,6 +1,6 @@
 # 0014. Distribution, build and quality tooling
 
-- Status: Accepted; amended by ADR 0019
+- Status: Accepted; amended by ADR 0019; clarified by ADR 0030
 - Date: 2026-11-14
 
 ## Decision

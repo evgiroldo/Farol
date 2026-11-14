@@ -1,6 +1,6 @@
 # 0029. Scope of version 1.0
 
-- Status: Accepted
+- Status: Accepted; clarified by ADR 0030
 - Date: 2026-11-14
 - Supersedes: 0005 (all four milestones formed the MVP)
 

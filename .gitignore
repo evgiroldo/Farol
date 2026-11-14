@@ -18,3 +18,7 @@ docs/spikes/**/probe
 !docs/spikes/**/*.swift
 !docs/spikes/**/*.txt
 !docs/spikes/**/*.md
+
+# 24-hour spike build outputs
+docs/spikes/sentinel-24h/.build/
+docs/spikes/sentinel-24h/FarolSpike.app/

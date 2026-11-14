@@ -9,7 +9,7 @@ Farol is a free, open-source app for Macs with Apple silicon. When your Mac feel
 ## How it works
 
 1. **It quietly keeps watch.** A tiny helper in the menu bar notices when your Mac starts working harder than usual and keeps a short record of what was running. It uses almost no battery or memory.
-2. **You ask "why?".** Open Farol and it shows a short answer first — for example: *"Your Mac is slow because Photos is analyzing your library. It should finish in about 20 minutes."* The details and graphs are there if you want them.
+2. **You ask "why?".** Open Farol and it shows a short answer first — for example: *"Your Mac is slow because Photos is analyzing your library. This is normal after adding many photos and often takes from minutes to a few hours."* The details and graphs are there if you want them.
 3. **It checks before it blames.** When an app looks guilty, Farol can pause it for a moment (only if you agree) and watch whether the Mac calms down. That way it shows evidence instead of guessing.
 
 Sometimes the honest answer is "nothing is wrong, this is normal and will end soon" — and Farol will say so.

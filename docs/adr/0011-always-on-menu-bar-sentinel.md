@@ -1,6 +1,6 @@
 # 0011. Always-on sentinel in the menu bar
 
-- Status: Accepted; process model amended by ADR 0017; budgets amended by ADR 0019; daemon watching added by ADR 0021; budget policy in ADR 0028
+- Status: Accepted; process model amended by ADR 0017; budgets amended by ADR 0019; daemon watching added by ADR 0021; budget policy in ADR 0028; clarified by ADR 0030
 - Date: 2026-11-14
 
 ## Context

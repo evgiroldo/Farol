@@ -1,6 +1,6 @@
 # 0024. Alert content and frequency
 
-- Status: Accepted
+- Status: Accepted; clarified by ADR 0030
 - Date: 2026-11-14
 - Amends: 0012 (alerts on by default — still true — now with content and rate rules)
 
