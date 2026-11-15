@@ -1,0 +1,532 @@
+{
+  "version": 1,
+  "processes": [
+    {
+      "id": "windowserver",
+      "executables": ["WindowServer"],
+      "paths": ["/System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer"],
+      "category": "display",
+      "watched": true,
+      "causeTest": true,
+      "normalEvidence": [],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Screen drawing",
+          "what": "Draws everything you see on the screen, for every app.",
+          "normal": "It works harder for a moment when you move windows, play video or connect another display.",
+          "typical": null,
+          "action": "If it stays busy, an app may be redrawing its window all the time. Farol can pause apps one by one to find which."
+        },
+        "pt-BR": {
+          "name": "Desenho da tela",
+          "what": "Desenha tudo o que você vê na tela, para todos os apps.",
+          "normal": "Trabalha mais por alguns instantes quando você move janelas, assiste a um vídeo ou conecta outro monitor.",
+          "typical": null,
+          "action": "Se continuar ocupado, algum app pode estar redesenhando a janela sem parar. O Farol pode pausar os apps um a um para descobrir qual."
+        }
+      }
+    },
+    {
+      "id": "kernel-task",
+      "executables": ["kernel_task"],
+      "paths": [],
+      "category": "thermal",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": ["thermal-pressure"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Cooling down the Mac",
+          "what": "When your Mac gets too warm, macOS deliberately takes processor time away from apps so the chip can cool down.",
+          "normal": "It appears when the Mac is hot: heavy work, a warm room, or air vents that are covered.",
+          "typical": "Usually a few minutes after the Mac cools down.",
+          "action": "Close heavy apps, keep the Mac on a hard surface with free airflow, and give it a few minutes."
+        },
+        "pt-BR": {
+          "name": "Resfriando o Mac",
+          "what": "Quando o Mac esquenta demais, o macOS tira tempo de processador dos apps de propósito para o chip esfriar.",
+          "normal": "Aparece quando o Mac está quente: trabalho pesado, ambiente quente ou saídas de ar cobertas.",
+          "typical": "Costuma passar alguns minutos depois que o Mac esfria.",
+          "action": "Feche apps pesados, deixe o Mac numa superfície firme com o ar circulando e espere alguns minutos."
+        }
+      }
+    },
+    {
+      "id": "spotlight-server",
+      "executables": ["mds"],
+      "paths": ["/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds"],
+      "category": "indexing",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["macos-update", "large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Spotlight search",
+          "what": "Manages the index that lets you find files, apps and messages with Spotlight.",
+          "normal": "It is busy after a macOS update or after many files were copied, downloaded or changed.",
+          "typical": "Often takes from minutes to a few hours.",
+          "action": "Let it finish while the Mac is plugged in. If it never stops, Farol will tell you."
+        },
+        "pt-BR": {
+          "name": "Busca do Spotlight",
+          "what": "Cuida do índice que permite encontrar arquivos, apps e mensagens pelo Spotlight.",
+          "normal": "Fica ocupado depois de uma atualização do macOS ou quando muitos arquivos foram copiados, baixados ou alterados.",
+          "typical": "Costuma levar de minutos a algumas horas.",
+          "action": "Deixe terminar com o Mac na tomada. Se nunca parar, o Farol avisa."
+        }
+      }
+    },
+    {
+      "id": "spotlight-store",
+      "executables": ["mds_stores"],
+      "paths": ["/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores"],
+      "category": "indexing",
+      "watched": true,
+      "causeTest": true,
+      "normalEvidence": ["macos-update", "large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Spotlight index",
+          "what": "Saves what Spotlight learns about your files, so searches are instant.",
+          "normal": "It is busy after a macOS update or after many files were copied or changed.",
+          "typical": "Often takes from minutes to a few hours.",
+          "action": "If it stays busy, an app may be changing files all the time. Farol can pause apps one by one to find which."
+        },
+        "pt-BR": {
+          "name": "Índice do Spotlight",
+          "what": "Guarda o que o Spotlight aprende sobre seus arquivos, para que as buscas sejam instantâneas.",
+          "normal": "Fica ocupado depois de uma atualização do macOS ou quando muitos arquivos foram copiados ou alterados.",
+          "typical": "Costuma levar de minutos a algumas horas.",
+          "action": "Se continuar ocupado, algum app pode estar mexendo em arquivos sem parar. O Farol pode pausar os apps um a um para descobrir qual."
+        }
+      }
+    },
+    {
+      "id": "spotlight-reader",
+      "executables": ["mdworker_shared"],
+      "paths": ["/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared"],
+      "category": "indexing",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["macos-update", "large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Spotlight reading files",
+          "what": "Opens new and changed files to read what is inside them for Spotlight.",
+          "normal": "Several copies may run at once after many files were added or changed.",
+          "typical": "Often takes from minutes to a few hours.",
+          "action": "Let it finish. Very large folders of small files take longest."
+        },
+        "pt-BR": {
+          "name": "Spotlight lendo arquivos",
+          "what": "Abre arquivos novos e alterados para o Spotlight saber o que há dentro deles.",
+          "normal": "Várias cópias podem rodar ao mesmo tempo depois que muitos arquivos foram adicionados ou alterados.",
+          "typical": "Costuma levar de minutos a algumas horas.",
+          "action": "Deixe terminar. Pastas enormes com muitos arquivos pequenos são as que mais demoram."
+        }
+      }
+    },
+    {
+      "id": "core-spotlight",
+      "executables": ["corespotlightd"],
+      "paths": ["/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd"],
+      "category": "indexing",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": ["macos-update"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Search inside apps",
+          "what": "Indexes content that apps such as Mail, Messages and Notes make searchable.",
+          "normal": "It is busy after a macOS update or when an app adds a lot of new content.",
+          "typical": "Often takes from minutes to a few hours.",
+          "action": "Let it finish while the Mac is plugged in."
+        },
+        "pt-BR": {
+          "name": "Busca dentro dos apps",
+          "what": "Indexa o conteúdo que apps como Mail, Mensagens e Notas tornam pesquisável.",
+          "normal": "Fica ocupado depois de uma atualização do macOS ou quando um app adiciona muito conteúdo novo.",
+          "typical": "Costuma levar de minutos a algumas horas.",
+          "action": "Deixe terminar com o Mac na tomada."
+        }
+      }
+    },
+    {
+      "id": "photos-analysis",
+      "executables": ["photoanalysisd"],
+      "paths": ["/System/Library/PrivateFrameworks/PhotoAnalysis.framework/Versions/A/Support/photoanalysisd"],
+      "category": "media",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["macos-update", "large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Photos learning your library",
+          "what": "Photos looks through your pictures to recognize people, places and objects, so you can search them.",
+          "normal": "It works after you add many photos or after a macOS update, mostly when the Mac is idle and plugged in.",
+          "typical": "Can take hours, or longer for very large libraries.",
+          "action": "Leave the Mac plugged in and awake for a while; it pauses on its own when you are busy."
+        },
+        "pt-BR": {
+          "name": "Fotos conhecendo sua biblioteca",
+          "what": "O Fotos analisa suas imagens para reconhecer pessoas, lugares e objetos, e assim permitir buscas.",
+          "normal": "Trabalha depois que você adiciona muitas fotos ou após uma atualização do macOS, principalmente com o Mac parado e na tomada.",
+          "typical": "Pode levar horas, ou mais em bibliotecas muito grandes.",
+          "action": "Deixe o Mac na tomada e ligado por um tempo; ele pausa sozinho quando você está usando o Mac."
+        }
+      }
+    },
+    {
+      "id": "media-analysis",
+      "executables": ["mediaanalysisd"],
+      "paths": ["/System/Library/PrivateFrameworks/MediaAnalysis.framework/Versions/A/mediaanalysisd"],
+      "category": "media",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["macos-update", "large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Understanding images and video",
+          "what": "Analyzes images and videos for features such as recognizing text in photos and looking up what is in a picture.",
+          "normal": "It works after you add many photos or videos, or after a macOS update.",
+          "typical": "Can take hours for large libraries.",
+          "action": "Leave the Mac plugged in for a while; it slows down on its own when you need the Mac."
+        },
+        "pt-BR": {
+          "name": "Entendendo imagens e vídeos",
+          "what": "Analisa imagens e vídeos para recursos como reconhecer textos em fotos e identificar o que aparece numa imagem.",
+          "normal": "Trabalha depois que você adiciona muitas fotos ou vídeos, ou após uma atualização do macOS.",
+          "typical": "Pode levar horas em bibliotecas grandes.",
+          "action": "Deixe o Mac na tomada por um tempo; ele desacelera sozinho quando você precisa do Mac."
+        }
+      }
+    },
+    {
+      "id": "photos-library",
+      "executables": ["photolibraryd"],
+      "paths": ["/System/Library/PrivateFrameworks/PhotoLibraryServices.framework/Versions/A/Support/photolibraryd"],
+      "category": "media",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": ["large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Photos library",
+          "what": "Manages your Photos library: importing, organizing and syncing with iCloud Photos.",
+          "normal": "It is busy while you import photos or while iCloud Photos is syncing.",
+          "typical": "Depends on how many photos are being imported or synced.",
+          "action": "Let the import or sync finish. You can pause iCloud syncing in the Photos app for a day."
+        },
+        "pt-BR": {
+          "name": "Biblioteca de fotos",
+          "what": "Cuida da sua biblioteca do Fotos: importação, organização e sincronização com o Fotos do iCloud.",
+          "normal": "Fica ocupada enquanto você importa fotos ou enquanto o Fotos do iCloud sincroniza.",
+          "typical": "Depende de quantas fotos estão sendo importadas ou sincronizadas.",
+          "action": "Deixe a importação ou a sincronização terminar. Dá para pausar a sincronização do iCloud no app Fotos por um dia."
+        }
+      }
+    },
+    {
+      "id": "time-machine",
+      "executables": ["backupd"],
+      "paths": ["/System/Library/CoreServices/TimeMachine/backupd"],
+      "category": "backup",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["backup-in-progress"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Time Machine backup",
+          "what": "Copies your files to your backup disk so you can recover them later.",
+          "normal": "It runs regularly. The first backup to a new disk is much longer than the following ones.",
+          "typical": "The first backup can take hours; later ones usually take minutes.",
+          "action": "Let it finish. If you need the Mac's full speed now, you can skip this backup from the Time Machine menu."
+        },
+        "pt-BR": {
+          "name": "Backup do Time Machine",
+          "what": "Copia seus arquivos para o disco de backup, para você poder recuperá-los depois.",
+          "normal": "Roda regularmente. O primeiro backup num disco novo é bem mais longo que os seguintes.",
+          "typical": "O primeiro backup pode levar horas; os seguintes costumam levar minutos.",
+          "action": "Deixe terminar. Se precisar do Mac em velocidade total agora, dá para pular este backup pelo menu do Time Machine."
+        }
+      }
+    },
+    {
+      "id": "software-update",
+      "executables": ["softwareupdated"],
+      "paths": [
+        "/System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated",
+        "/System/Library/PrivateFrameworks/MobileSoftwareUpdate.framework/Support/softwareupdated"
+      ],
+      "category": "update",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["macos-update"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "macOS update",
+          "what": "Downloads and prepares macOS updates.",
+          "normal": "It works when an update is available, before it asks you to restart.",
+          "typical": "Often takes from minutes to about an hour.",
+          "action": "Let it finish, or postpone it in System Settings > General > Software Update."
+        },
+        "pt-BR": {
+          "name": "Atualização do macOS",
+          "what": "Baixa e prepara as atualizações do macOS.",
+          "normal": "Trabalha quando há uma atualização disponível, antes de pedir para reiniciar.",
+          "typical": "Costuma levar de minutos a cerca de uma hora.",
+          "action": "Deixe terminar, ou adie em Ajustes do Sistema > Geral > Atualização de Software."
+        }
+      }
+    },
+    {
+      "id": "icloud-sync",
+      "executables": ["cloudd"],
+      "paths": ["/System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd"],
+      "category": "sync",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "iCloud sync",
+          "what": "Keeps app data in sync with iCloud, such as notes, reminders and app documents.",
+          "normal": "It is busy after you sign in to iCloud, set up a Mac, or change a lot of data.",
+          "typical": "Often takes from minutes to a few hours after a big change.",
+          "action": "Let it finish while connected to the internet. If it never stops, signing out of iCloud and back in sometimes helps."
+        },
+        "pt-BR": {
+          "name": "Sincronização do iCloud",
+          "what": "Mantém os dados dos apps sincronizados com o iCloud, como notas, lembretes e documentos.",
+          "normal": "Fica ocupado depois que você entra no iCloud, configura um Mac ou altera muitos dados.",
+          "typical": "Costuma levar de minutos a algumas horas depois de uma grande mudança.",
+          "action": "Deixe terminar com a internet conectada. Se nunca parar, sair e entrar de novo no iCloud às vezes resolve."
+        }
+      }
+    },
+    {
+      "id": "icloud-drive",
+      "executables": ["bird"],
+      "paths": ["/System/Library/PrivateFrameworks/iCloudDriveCore.framework/Versions/A/Support/bird"],
+      "category": "sync",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "iCloud Drive",
+          "what": "Uploads and downloads the files you keep in iCloud Drive, including Desktop and Documents if they sync.",
+          "normal": "It is busy after you add or change many files in iCloud Drive.",
+          "typical": "Depends on how much there is to upload and on your connection.",
+          "action": "Let it finish. If it never does, check that your iCloud storage is not full."
+        },
+        "pt-BR": {
+          "name": "iCloud Drive",
+          "what": "Envia e baixa os arquivos que você guarda no iCloud Drive, inclusive Mesa e Documentos se estiverem sincronizados.",
+          "normal": "Fica ocupado depois que você adiciona ou altera muitos arquivos no iCloud Drive.",
+          "typical": "Depende de quanto há para enviar e da sua conexão.",
+          "action": "Deixe terminar. Se nunca terminar, confira se o armazenamento do iCloud não está cheio."
+        }
+      }
+    },
+    {
+      "id": "file-provider",
+      "executables": ["fileproviderd"],
+      "paths": ["/System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd"],
+      "category": "sync",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": ["large-file-change"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Cloud storage in Finder",
+          "what": "Connects cloud storage — iCloud Drive and apps such as Dropbox, Google Drive or OneDrive — to Finder.",
+          "normal": "It is busy while many cloud files are being synced or listed.",
+          "typical": "Depends on how many files are syncing.",
+          "action": "Let the sync finish. If one cloud app keeps it busy, Farol can show which app it works for."
+        },
+        "pt-BR": {
+          "name": "Nuvem no Finder",
+          "what": "Conecta armazenamentos na nuvem — iCloud Drive e apps como Dropbox, Google Drive ou OneDrive — ao Finder.",
+          "normal": "Fica ocupado enquanto muitos arquivos da nuvem estão sendo sincronizados ou listados.",
+          "typical": "Depende de quantos arquivos estão sincronizando.",
+          "action": "Deixe a sincronização terminar. Se um app de nuvem o mantiver ocupado, o Farol pode mostrar para qual app ele trabalha."
+        }
+      }
+    },
+    {
+      "id": "background-downloads",
+      "executables": ["nsurlsessiond"],
+      "paths": ["/usr/libexec/nsurlsessiond"],
+      "category": "network",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": [],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Background downloads",
+          "what": "Downloads and uploads files in the background for macOS and for apps.",
+          "normal": "It is busy while updates, podcasts, app content or cloud files transfer.",
+          "typical": "Depends on the size of the transfer and your connection.",
+          "action": "Let it finish. Farol shows the app it is working for when it can."
+        },
+        "pt-BR": {
+          "name": "Downloads em segundo plano",
+          "what": "Baixa e envia arquivos em segundo plano para o macOS e para os apps.",
+          "normal": "Fica ocupado enquanto atualizações, podcasts, conteúdo de apps ou arquivos da nuvem são transferidos.",
+          "typical": "Depende do tamanho da transferência e da sua conexão.",
+          "action": "Deixe terminar. O Farol mostra para qual app ele está trabalhando, quando consegue saber."
+        }
+      }
+    },
+    {
+      "id": "app-check",
+      "executables": ["syspolicyd"],
+      "paths": ["/usr/libexec/syspolicyd"],
+      "category": "security",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": ["new-app-opened"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Checking a new app",
+          "what": "Checks apps the first time you open them, to make sure they are safe and have not been changed.",
+          "normal": "It works when you open an app for the first time or after an app was updated.",
+          "typical": "Usually seconds; large apps can take a minute.",
+          "action": "Nothing to do; it finishes on its own."
+        },
+        "pt-BR": {
+          "name": "Verificando um app novo",
+          "what": "Verifica os apps na primeira vez que você os abre, para garantir que são seguros e não foram alterados.",
+          "normal": "Trabalha quando você abre um app pela primeira vez ou depois que um app foi atualizado.",
+          "typical": "Costuma levar segundos; apps grandes podem levar um minuto.",
+          "action": "Nada a fazer; termina sozinho."
+        }
+      }
+    },
+    {
+      "id": "xprotect",
+      "executables": ["XProtect", "XprotectService", "XProtectPluginService"],
+      "paths": [
+        "/Library/Apple/System/Library/CoreServices/XProtect.app/Contents/MacOS/XProtect",
+        "/Library/Apple/System/Library/CoreServices/XProtect.app/Contents/XPCServices/XProtectPluginService.xpc/Contents/MacOS/XProtectPluginService",
+        "/System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService"
+      ],
+      "category": "security",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": ["macos-update", "new-app-opened"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Malware protection",
+          "what": "Apple's built-in protection that checks files and apps for known malware.",
+          "normal": "It works after it receives new definitions from Apple, and when new apps or files arrive.",
+          "typical": "Usually brief.",
+          "action": "Nothing to do; it is part of macOS security."
+        },
+        "pt-BR": {
+          "name": "Proteção contra malware",
+          "what": "A proteção da Apple, já embutida no macOS, que verifica arquivos e apps em busca de malware conhecido.",
+          "normal": "Trabalha depois de receber novas definições da Apple e quando chegam apps ou arquivos novos.",
+          "typical": "Costuma ser rápido.",
+          "action": "Nada a fazer; faz parte da segurança do macOS."
+        }
+      }
+    },
+    {
+      "id": "core-audio",
+      "executables": ["coreaudiod"],
+      "paths": ["/usr/sbin/coreaudiod"],
+      "category": "audio",
+      "watched": true,
+      "causeTest": false,
+      "normalEvidence": [],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Sound",
+          "what": "Handles all sound on the Mac: speakers, headphones and microphones.",
+          "normal": "It works a little while any app plays or records sound.",
+          "typical": null,
+          "action": "If it stays busy with nothing playing, an app may be keeping sound open; restarting that app usually helps."
+        },
+        "pt-BR": {
+          "name": "Som",
+          "what": "Cuida de todo o som do Mac: alto-falantes, fones e microfones.",
+          "normal": "Trabalha um pouco enquanto algum app toca ou grava som.",
+          "typical": null,
+          "action": "Se continuar ocupado sem nada tocando, algum app pode estar mantendo o som aberto; reiniciar esse app costuma resolver."
+        }
+      }
+    },
+    {
+      "id": "on-device-knowledge",
+      "executables": ["knowledgeconstructiond"],
+      "paths": ["/System/Library/PrivateFrameworks/IntelligencePlatformCore.framework/Versions/A/knowledgeconstructiond"],
+      "category": "intelligence",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": ["macos-update"],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Personal suggestions",
+          "what": "Builds, on your Mac, the knowledge macOS uses for personal suggestions and intelligence features.",
+          "normal": "It works after a macOS update or when Apple Intelligence features are turned on.",
+          "typical": "Often takes from minutes to a few hours.",
+          "action": "Leave the Mac plugged in for a while; it does most of its work when the Mac is idle."
+        },
+        "pt-BR": {
+          "name": "Sugestões pessoais",
+          "what": "Monta, no próprio Mac, o conhecimento que o macOS usa para sugestões pessoais e recursos de inteligência.",
+          "normal": "Trabalha depois de uma atualização do macOS ou quando os recursos de Apple Intelligence são ativados.",
+          "typical": "Costuma levar de minutos a algumas horas.",
+          "action": "Deixe o Mac na tomada por um tempo; ele faz a maior parte do trabalho com o Mac parado."
+        }
+      }
+    },
+    {
+      "id": "web-content",
+      "executables": ["com.apple.WebKit.WebContent"],
+      "paths": [],
+      "category": "app-helper",
+      "watched": false,
+      "causeTest": false,
+      "normalEvidence": [],
+      "lagSeconds": null,
+      "text": {
+        "en": {
+          "name": "Web page",
+          "what": "Runs one or more web pages for Safari or for an app that shows web content.",
+          "normal": "Each open tab or web view can have its own copy; busy pages (video, animations, ads) use more.",
+          "typical": null,
+          "action": "Farol counts it as part of the app it belongs to. Closing heavy tabs, or restarting the app, usually helps."
+        },
+        "pt-BR": {
+          "name": "Página da web",
+          "what": "Roda uma ou mais páginas da web para o Safari ou para um app que mostra conteúdo da web.",
+          "normal": "Cada aba ou visualização da web pode ter sua própria cópia; páginas agitadas (vídeo, animações, anúncios) usam mais.",
+          "typical": null,
+          "action": "O Farol conta isso como parte do app a que pertence. Fechar abas pesadas, ou reiniciar o app, costuma resolver."
+        }
+      }
+    }
+  ]
+}

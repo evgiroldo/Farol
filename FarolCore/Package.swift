@@ -11,6 +11,7 @@ let package = Package(
     targets: [
         .target(
             name: "FarolCore",
+            resources: [.process("Resources")],
             linkerSettings: [.linkedLibrary("sqlite3")]
         ),
         .testTarget(name: "FarolCoreTests", dependencies: ["FarolCore"]),

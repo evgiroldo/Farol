@@ -40,3 +40,4 @@
 | [0035](0035-results-settings-alerts-and-lifecycle.md) | Test results, settings, alert filters, disk and sentinel lifecycle | Accepted |
 | [0036](0036-anonymous-reports-sent-by-the-user.md) | Anonymous reports sent by the user | Accepted |
 | [0037](0037-process-sampler-caches.md) | Process sampler caches | Accepted |
+| [0038](0038-platform-scope-reconsidered.md) | Platform scope reconsidered: no Intel, no older macOS (for now) | Accepted |
