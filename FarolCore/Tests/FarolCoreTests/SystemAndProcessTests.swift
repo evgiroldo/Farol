@@ -78,7 +78,8 @@ struct ProcessSamplerTests {
         child.arguments = ["5"]
         try child.run()
         defer { child.terminate() }
-        let snapshot = ProcessSampler().snapshot()
+        var sampler = ProcessSampler()
+        let snapshot = sampler.snapshot()
         let found = try #require(snapshot.processes.first { $0.identity.pid == child.processIdentifier })
         #expect(found.name == "sleep")
         #expect(found.uid == getuid())
@@ -112,6 +113,55 @@ struct ProcessSamplerTests {
         #expect(ProcessSampler.deltas(from: earlier, to: later).isEmpty)
     }
 
+    /// ADR 0037: cached snapshots must report exactly what an uncached read reports.
+    @Test func cachedSnapshotMatchesFreshReads() throws {
+        var sampler = ProcessSampler()
+        _ = sampler.snapshot()
+        let cached = sampler.snapshot()
+        #expect(!sampler.known.isEmpty)
+        #expect(!sampler.unreadable.isEmpty)  // other users' processes are remembered as unreadable
+        var compared = 0
+        for s in cached.processes.prefix(50) {
+            guard let fresh = sampler.sample(pid: s.identity.pid) else { continue }  // may have exited
+            guard fresh.identity == s.identity else { continue }  // PID reused in between
+            #expect(fresh.name == s.name)
+            #expect(fresh.uid == s.uid)
+            compared += 1
+        }
+        #expect(compared > 10)
+    }
+
+    /// ADR 0037: a cached entry whose kernel start time no longer matches (a reused PID)
+    /// is replaced, never reused.
+    @Test func reusedPIDInvalidatesTheCache() throws {
+        let child = Process()
+        child.executableURL = URL(fileURLWithPath: "/bin/sleep")
+        child.arguments = ["5"]
+        try child.run()
+        defer { child.terminate() }
+        let pid = child.processIdentifier
+        var sampler = ProcessSampler()
+        _ = sampler.snapshot()
+        let real = try #require(sampler.known[pid])
+        sampler.known[pid] = ProcessSampler.Known(
+            startAbstime: real.startAbstime &+ 1, identity: ProcessIdentity(pid: pid, startTime: 1),
+            name: "stale", uid: 0)
+        let again = try #require(sampler.snapshot().processes.first { $0.identity.pid == pid })
+        #expect(again.name == "sleep")
+        #expect(again.identity == real.identity)
+    }
+
+    @Test func newProcessesAppearWithoutWaitingForARefresh() throws {
+        var sampler = ProcessSampler()
+        _ = sampler.snapshot()
+        let child = Process()
+        child.executableURL = URL(fileURLWithPath: "/bin/sleep")
+        child.arguments = ["5"]
+        try child.run()
+        defer { child.terminate() }
+        #expect(sampler.snapshot().processes.contains { $0.identity.pid == child.processIdentifier })
+    }
+
     @Test func namesCannotSpoofTheInterface() {
         #expect(ProcessSampler.sanitized("Finder\u{202E}gpj.exe") == "Findergpj.exe")
         #expect(ProcessSampler.sanitized("evil\nname\u{0007}") == "evilname")
@@ -121,7 +171,7 @@ struct ProcessSamplerTests {
     /// Budget (ADR 0011): in incident mode the sentinel samples every process once per
     /// second; one pass must stay well under 50 ms of wall time.
     @Test func fullSampleIsCheapEnough() {
-        let sampler = ProcessSampler()
+        var sampler = ProcessSampler()
         _ = sampler.snapshot()  // warm up
         let clock = ContinuousClock()
         let elapsed = clock.measure { _ = sampler.snapshot() }

@@ -94,7 +94,7 @@ final class Engine: NSObject, NSXPCListenerDelegate {
     let queue = DispatchQueue(label: "farol.spike.sentinel", qos: .utility)
     let started = Date()
     let monitor: MemoryPressureMonitor
-    let sampler = ProcessSampler()
+    var sampler = ProcessSampler()
     let store: HistoryStore
     var detector = AnomalyDetector()
     var lastSnapshot: SystemSnapshot?

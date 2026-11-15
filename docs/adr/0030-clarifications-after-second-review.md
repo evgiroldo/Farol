@@ -1,6 +1,6 @@
 # 0030. Clarifications after the second review
 
-- Status: Accepted
+- Status: Accepted; snapshot cost amended by ADR 0037
 - Date: 2026-11-14
 - Amends: 0011, 0014, 0017, 0021, 0024, 0026, 0029
 

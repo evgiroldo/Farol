@@ -32,10 +32,11 @@
 | [0027](0027-grouping-processes-into-apps.md) | Grouping processes into apps | Amended by 0034 |
 | [0028](0028-budget-policy.md) | Resource budget policy | Accepted |
 | [0029](0029-scope-of-version-1.md) | Scope of version 1.0 | Amended by 0030, 0035, 0036 |
-| [0030](0030-clarifications-after-second-review.md) | Clarifications after the second review | Accepted |
+| [0030](0030-clarifications-after-second-review.md) | Clarifications after the second review | Amended by 0037 |
 | [0031](0031-solve-dont-show.md) | Solve, don't show | Amended by 0035 |
 | [0032](0032-detection-details.md) | Detection details: suspicion sequence, "normal" work, incident limits | Accepted |
 | [0033](0033-cause-test-statistics.md) | Cause test statistics | Accepted |
 | [0034](0034-pause-safety-details.md) | Pause safety details | Accepted |
 | [0035](0035-results-settings-alerts-and-lifecycle.md) | Test results, settings, alert filters, disk and sentinel lifecycle | Accepted |
 | [0036](0036-anonymous-reports-sent-by-the-user.md) | Anonymous reports sent by the user | Accepted |
+| [0037](0037-process-sampler-caches.md) | Process sampler caches | Accepted |
