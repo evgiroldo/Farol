@@ -7,6 +7,7 @@ Throwaway prototypes used as evidence for architecture decisions. **Not Farol co
 | [`attribution/`](attribution/) | Can we attribute daemon load to the app that caused it, without root? | Correlation alone is ambiguous. Pausing gave a strong single-trial signal for mds_stores (−99%); the WindowServer run (−63%) is not evidence: daemon load was ~0.6% and within noise. Feasibility signal only — see ADR 0019 | [0010](../adr/0010-causal-attribution-and-proof-by-pause.md) |
 | [`sentinel/`](sentinel/) | Can an always-on menu bar sentinel stay under 0.1% CPU? | 0.006–0.008% idle, 12.5 MB; incident mode 0.3–0.6% (one Mac, 250 s, no SQLite or daemon reads yet) | [0011](../adr/0011-always-on-menu-bar-sentinel.md) |
 | [`sentinel-24h/`](sentinel-24h/) | Do the budgets hold with every part of the real sentinel (SQLite, `ps`, 60 s ring, notifications, XPC, menu) over 24 h? | First hour (uncached sampler, `results-run1-uncached.csv`): 0.17–0.42% CPU while in use, caused by the process snapshot (ADR 0037). Restarted 2026-11-15 01:09 with caches; results when done | [0028](../adr/0028-budget-policy.md) |
+| [`attribution-v2/`](attribution-v2/) | Can the cause test be trusted with real WebKit drawing and real file indexing, and which thresholds keep false proofs under 1%? Does Farol's own window hide the load? | Built 2026-11-15, not run yet; see `attribution-v2/RUN.md` | [0033](../adr/0033-cause-test-statistics.md), [0034](../adr/0034-pause-safety-details.md) |
 
 ## Reproducing
 

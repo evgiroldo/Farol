@@ -1,0 +1,114 @@
+<!doctype html>
+<!-- Throwaway load page for the Farol attribution spike v2. NOT Farol code.
+     A real WebKit workload: many composited CSS layers, backdrop blur panels and a 2D canvas.
+     Colours move slowly and stay low-contrast on purpose (no flashing).
+     window.SPIKE = {level, on, off} is injected by the host app before this script runs. -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Farol spike load</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #10151b; }
+  canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  .layer {
+    position: absolute; width: 150px; height: 150px; border-radius: 50%;
+    will-change: transform, opacity;
+    animation: wander var(--d) ease-in-out infinite alternate;
+  }
+  .glass {
+    position: absolute; border-radius: 28px; background: rgba(255, 255, 255, 0.06);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    will-change: transform;
+    animation: drift var(--d) ease-in-out infinite alternate;
+  }
+  body.off .layer, body.off .glass { animation-play-state: paused; }
+  @keyframes wander {
+    from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); opacity: 0.55; }
+    to   { transform: translate3d(var(--x), var(--y), 0) rotate(300deg) scale(1.5); opacity: 0.3; }
+  }
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(var(--x), var(--y), 0); }
+  }
+  #label { position: absolute; left: 16px; bottom: 12px; color: #9fb0c0; font: 13px -apple-system, sans-serif; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="label">Farol attribution spike — test load. It closes by itself.</div>
+<script>
+(function () {
+  var cfg = window.SPIKE || { level: 1, on: 0, off: 0 };
+  var level = Math.max(1, Math.min(3, cfg.level | 0));
+  var layers = [150, 400, 900][level - 1];
+  var glass = [4, 12, 30][level - 1];
+  var circles = [300, 700, 1500][level - 1];
+  var W = window.innerWidth, H = window.innerHeight;
+
+  function isOn() {
+    if (!(cfg.on > 0 && cfg.off > 0)) return true;            // steady
+    return ((Date.now() / 1000) % (cfg.on + cfg.off)) < cfg.on; // same formula as the decoy
+  }
+
+  for (var i = 0; i < layers; i++) {
+    var d = document.createElement('div');
+    d.className = 'layer';
+    var hue = 190 + (i * 7) % 60;
+    d.style.left = ((i * 97) % W - 75) + 'px';
+    d.style.top = ((i * 61) % H - 75) + 'px';
+    d.style.background = 'radial-gradient(circle, hsla(' + hue + ',45%,55%,0.55), hsla(' + hue + ',45%,35%,0))';
+    d.style.setProperty('--x', (((i * 53) % 400) - 200) + 'px');
+    d.style.setProperty('--y', (((i * 29) % 300) - 150) + 'px');
+    d.style.setProperty('--d', (3 + (i % 7)) + 's');
+    document.body.appendChild(d);
+  }
+  for (var j = 0; j < glass; j++) {
+    var g = document.createElement('div');
+    g.className = 'glass';
+    g.style.left = ((j * 211) % Math.max(1, W - 320)) + 'px';
+    g.style.top = ((j * 137) % Math.max(1, H - 220)) + 'px';
+    g.style.width = '320px';
+    g.style.height = '220px';
+    g.style.setProperty('--x', (((j * 71) % 300) - 150) + 'px');
+    g.style.setProperty('--y', (((j * 43) % 200) - 100) + 'px');
+    g.style.setProperty('--d', (4 + (j % 5)) + 's');
+    document.body.appendChild(g);
+  }
+
+  var canvas = document.getElementById('c');
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var t = 0, frames = 0, wasOn = true;
+
+  function frame() {
+    var on = isOn();
+    if (on !== wasOn) { document.body.classList.toggle('off', !on); wasOn = on; }
+    if (on) {
+      t += 1;
+      ctx.fillStyle = 'rgba(16, 21, 27, 0.35)';
+      ctx.fillRect(0, 0, W, H);
+      for (var k = 0; k < circles; k++) {
+        var x = (k * 37 + t * (0.6 + (k % 5) * 0.2)) % W;
+        var y = (k * 53 + Math.sin((t + k) / 40) * 30 + H) % H;
+        ctx.fillStyle = 'hsla(' + (200 + (k % 40)) + ', 35%, 55%, 0.35)';
+        ctx.beginPath();
+        ctx.arc(x, y, 9 + (k % 6), 0, 6.283);
+        ctx.fill();
+      }
+    }
+    frames += 1;   // counts animation callbacks WebKit actually delivered (throttling shows here)
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  setInterval(function () {
+    try { window.webkit.messageHandlers.spike.postMessage({ frames: frames, on: isOn() ? 1 : 0 }); } catch (e) {}
+    frames = 0;
+  }, 1000);
+})();
+</script>
+</body>
+</html>
