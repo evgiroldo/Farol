@@ -1,6 +1,6 @@
 # 0021. Watching system daemons without breaking the idle budget
 
-- Status: Accepted; clarified by ADR 0030; amended by ADR 0032
+- Status: Accepted; clarified by ADR 0030; amended by ADR 0032; amended by ADR 0039
 - Date: 2026-11-14
 - Amends: 0007 (cost of `/bin/ps`), 0011 (what the sentinel watches)
 

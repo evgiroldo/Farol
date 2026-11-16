@@ -108,7 +108,10 @@ final class Engine: NSObject, NSXPCListenerDelegate {
     var psCalls = 0
     var daemonHighEvents = 0
 
-    var ring: [[ProcessDelta]] = []  // top 20 apps, every 10 s, last 60 s
+    var ring: [[ProcessDelta]] = []  // top 20 apps, every 20 s, last 60 s (ADR 0039)
+    let ringInterval = 20.0
+    let incidentInterval = 5.0
+    var lastIncidentSample = 0.0
     var lastProcessSnapshot: ProcessSnapshot?
     var lastRingSample = 0.0
 
@@ -152,8 +155,8 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         let suspicious = load.busyCores > (detector.baseline ?? load.busyCores) + 0.3
         if t - lastDaemonQuery >= 30 || (suspicious && t - lastDaemonQuery >= 10) { queryDaemons(at: t) }
 
-        // Ring: top 20 apps every 10 s.
-        if t - lastRingSample >= 10 { sampleRing(at: t) }
+        // Ring: top 20 apps every 20 s, only outside incidents (an incident samples on its own).
+        if incidentID == nil, t - lastRingSample >= ringInterval { sampleRing(at: t) }
 
         if let event = detector.observe(load, at: t) {
             switch event {
@@ -161,7 +164,10 @@ final class Engine: NSObject, NSXPCListenerDelegate {
             case .ended: endIncident()
             }
         }
-        if incidentID != nil { incidentTick() }
+        if incidentID != nil, t - lastIncidentSample >= incidentInterval {
+            incidentTick()
+            lastIncidentSample = t
+        }
 
         if Date().timeIntervalSince1970 - minuteStart >= 60 { flushMinute() }
         if Date().timeIntervalSince(lastReport) >= 300 { report() }
@@ -190,7 +196,7 @@ final class Engine: NSObject, NSXPCListenerDelegate {
             let top = ProcessSampler.deltas(from: previous, to: snapshot)
                 .sorted { $0.cpuSeconds > $1.cpuSeconds }.prefix(20)
             ring.append(Array(top))
-            if ring.count > 6 { ring.removeFirst() }
+            if ring.count > 3 { ring.removeFirst() }
         }
         lastProcessSnapshot = snapshot
         lastRingSample = t
@@ -205,14 +211,14 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         incidents += 1
         // The ring becomes the incident's first samples.
         let records = ring.enumerated().flatMap { index, deltas in
-            deltas.map { IncidentProcessRecord(time: now - Double(ring.count - index) * 10, delta: $0) }
+            deltas.map { IncidentProcessRecord(time: now - Double(ring.count - index) * ringInterval, delta: $0) }
         }
         try? store.append(records, incident: id)
         onStateChange?(true)
     }
 
     func incidentTick() {
-        // Detailed sampling every 2 s tick (the spike uses the idle cadence), capped at 10 minutes.
+        // Detailed sampling every 5 s (ADR 0039), capped at 10 minutes.
         let snapshot = sampler.snapshot()
         if let previous = lastProcessSnapshot, Date().timeIntervalSince1970 - incidentStarted < 600 {
             let now = Date().timeIntervalSince1970
@@ -232,6 +238,7 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         pendingRecords.removeAll()
         try? store.endIncident(id, at: Date().timeIntervalSince1970)
         incidentID = nil
+        ring.removeAll()  // samples from before the incident are stale now
         onStateChange?(false)
     }
 
