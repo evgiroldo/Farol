@@ -375,7 +375,7 @@ func runTest(run: Run, stim: Stimuli, target: String, id testId: String, watchdo
     guard !ids.isEmpty else { return }
     let wallStart = wallNow()
     if let refusal {
-        appendLine(testsPath, "\(testId),\(stim.rhythm),\(target),\(wallStart),\(wallStart),\(ids.count),\(ids.map { String($0.pid) }.joined(separator: ";")),,,\(refusal),,,")
+        appendLine(testsPath, "\(testId),\(csvSafe(stim.rhythm)),\(target),\(wallStart),\(wallStart),\(ids.count),\(ids.map { String($0.pid) }.joined(separator: ";")),,,\(refusal),,,")
         run.note("test \(testId): \(refusal)")
         return
     }
@@ -429,7 +429,7 @@ func runTest(run: Run, stim: Stimuli, target: String, id testId: String, watchdo
     let web = webStatus(stim, from: t0, to: t0 + windowSeconds * Double(observationWindows))
     appendLine(
         testsPath,
-        "\(testId),\(stim.rhythm),\(target),\(wallStart),\(wallNow()),\(ids.count),\(ids.map { String($0.pid) }.joined(separator: ";")),"
+        "\(testId),\(csvSafe(stim.rhythm)),\(target),\(wallStart),\(wallNow()),\(ids.count),\(ids.map { String($0.pid) }.joined(separator: ";")),"
             + "\(stops.map(f3).joined(separator: ";")),\(conts.map(f3).joined(separator: ";")),\(status),"
             + "\(String(format: "%.2f", 100 * cpu / max(wall, 0.001))),\(web.map { f2($0.fps) } ?? ""),\(web.map { f2($0.visible) } ?? "")")
     writeCost(run, phase: "test-\(testId)", wall: wall, cpu: cpu, calls: lastK + 1, cadence: traceBin)
@@ -615,3 +615,6 @@ func probe(run: Run) {
         print("  \(pid)  resp \(resp.map(String.init) ?? "?") → \(respName)  apple \(isAppleSigned(pid))  \(info.id.path)")
     }
 }
+
+/// Rhythms such as "pulsed:4,3" contain a comma; CSV fields here are never quoted.
+func csvSafe(_ s: String) -> String { s.replacingOccurrences(of: ",", with: "/") }

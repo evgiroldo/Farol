@@ -72,9 +72,9 @@ struct KnowledgeBaseTests {
         }
     }
 
-    /// ADR 0029: version 1.0 offers the cause test for WindowServer and Spotlight only.
-    @Test func causeTestOnlyForTheTwoClassicCases() {
-        #expect(Set(kb.processes.filter(\.causeTest).map(\.id)) == ["windowserver", "spotlight-store"])
+    /// ADR 0040: version 1.0 offers the cause test for WindowServer only.
+    @Test func causeTestOnlyForWindowServer() {
+        #expect(Set(kb.processes.filter(\.causeTest).map(\.id)) == ["windowserver"])
     }
 
     /// ADR 0030: an app cannot pass itself off as a system process by its name.

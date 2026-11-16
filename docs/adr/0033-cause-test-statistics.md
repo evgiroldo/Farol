@@ -1,6 +1,6 @@
 # 0033. Cause test statistics
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0040
 - Date: 2026-11-15
 - Amends: 0022
 

@@ -43,7 +43,7 @@ public struct KnowledgeBase: Sendable, Decodable {
         public let category: String
         /// Watched by the sentinel through `ps` (ADR 0021).
         public let watched: Bool
-        /// Offered the cause test in version 1.0 (ADR 0029).
+        /// Offered the cause test in version 1.0 (ADRs 0029, 0040).
         public let causeTest: Bool
         public let normalEvidence: [Evidence]
         /// How long the process takes to react to a pause (ADR 0033); `nil` until measured.

@@ -134,9 +134,13 @@ func runWriter(_ a: Args) -> Never {
                     text += words[Int.random(in: 0..<words.count, using: &rng)]
                     text += " "
                 }
-                let path = "\(dir)/\(writerFilePrefix)\(n % 400).txt"
+                // Run 2: a new file each time, the oldest removed once 400 exist. Run 1 rewrote the same
+                // 400 files over and over, and Spotlight stopped indexing them (mdfind found none),
+                // while a single new file in the same folder was indexed within 15 s.
+                let path = "\(dir)/\(writerFilePrefix)\(n).txt"
                 // Non-atomic on purpose: no temporary file names, so cleanup by prefix is complete.
                 try? text.write(toFile: path, atomically: false, encoding: .utf8)
+                if n >= 400 { unlink("\(dir)/\(writerFilePrefix)\(n - 400).txt") }
                 n += 1
             }
         }

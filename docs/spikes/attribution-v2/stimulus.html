@@ -1,6 +1,9 @@
 <!doctype html>
 <!-- Throwaway load page for the Farol attribution spike v2. NOT Farol code.
-     A real WebKit workload: many composited CSS layers, backdrop blur panels and a 2D canvas.
+     A real WebKit workload: many composited layers, backdrop blur panels and a 2D canvas.
+     Run 2: every frame is driven by the page's own script (no CSS animations). CSS animations are
+     handed to the system compositor and keep running while the app is paused (run 1 result),
+     so they cannot test whether pausing an app removes the work it causes.
      Colours move slowly and stay low-contrast on purpose (no flashing).
      window.SPIKE = {level, on, off} is injected by the host app before this script runs. -->
 <html>
@@ -13,22 +16,11 @@
   .layer {
     position: absolute; width: 150px; height: 150px; border-radius: 50%;
     will-change: transform, opacity;
-    animation: wander var(--d) ease-in-out infinite alternate;
   }
   .glass {
     position: absolute; border-radius: 28px; background: rgba(255, 255, 255, 0.06);
     -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
     will-change: transform;
-    animation: drift var(--d) ease-in-out infinite alternate;
-  }
-  body.off .layer, body.off .glass { animation-play-state: paused; }
-  @keyframes wander {
-    from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); opacity: 0.55; }
-    to   { transform: translate3d(var(--x), var(--y), 0) rotate(300deg) scale(1.5); opacity: 0.3; }
-  }
-  @keyframes drift {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(var(--x), var(--y), 0); }
   }
   #label { position: absolute; left: 16px; bottom: 12px; color: #9fb0c0; font: 13px -apple-system, sans-serif; }
 </style>
@@ -50,6 +42,7 @@
     return ((Date.now() / 1000) % (cfg.on + cfg.off)) < cfg.on; // same formula as the decoy
   }
 
+  var moving = [];
   for (var i = 0; i < layers; i++) {
     var d = document.createElement('div');
     d.className = 'layer';
@@ -57,9 +50,7 @@
     d.style.left = ((i * 97) % W - 75) + 'px';
     d.style.top = ((i * 61) % H - 75) + 'px';
     d.style.background = 'radial-gradient(circle, hsla(' + hue + ',45%,55%,0.55), hsla(' + hue + ',45%,35%,0))';
-    d.style.setProperty('--x', (((i * 53) % 400) - 200) + 'px');
-    d.style.setProperty('--y', (((i * 29) % 300) - 150) + 'px');
-    d.style.setProperty('--d', (3 + (i % 7)) + 's');
+    moving.push({ el: d, x: ((i * 53) % 400) - 200, y: ((i * 29) % 300) - 150, d: 3 + (i % 7), spin: true });
     document.body.appendChild(d);
   }
   for (var j = 0; j < glass; j++) {
@@ -69,9 +60,7 @@
     g.style.top = ((j * 137) % Math.max(1, H - 220)) + 'px';
     g.style.width = '320px';
     g.style.height = '220px';
-    g.style.setProperty('--x', (((j * 71) % 300) - 150) + 'px');
-    g.style.setProperty('--y', (((j * 43) % 200) - 100) + 'px');
-    g.style.setProperty('--d', (4 + (j % 5)) + 's');
+    moving.push({ el: g, x: ((j * 71) % 300) - 150, y: ((j * 43) % 200) - 100, d: 4 + (j % 5), spin: false });
     document.body.appendChild(g);
   }
 
@@ -81,13 +70,25 @@
   canvas.height = Math.floor(H * dpr);
   var ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
-  var t = 0, frames = 0, wasOn = true;
+  var t = 0, frames = 0;
 
   function frame() {
     var on = isOn();
-    if (on !== wasOn) { document.body.classList.toggle('off', !on); wasOn = on; }
     if (on) {
       t += 1;
+      // Same motion as run 1's CSS (alternate, ease-in-out), but computed here every frame.
+      var now = performance.now() / 1000;
+      for (var m = 0; m < moving.length; m++) {
+        var o = moving[m];
+        var p = 0.5 - 0.5 * Math.cos(Math.PI * now / o.d);
+        var tr = 'translate3d(' + (p * o.x).toFixed(1) + 'px,' + (p * o.y).toFixed(1) + 'px,0)';
+        if (o.spin) {
+          o.el.style.transform = tr + ' rotate(' + (300 * p).toFixed(1) + 'deg) scale(' + (1 + 0.5 * p).toFixed(3) + ')';
+          o.el.style.opacity = (0.55 - 0.25 * p).toFixed(3);
+        } else {
+          o.el.style.transform = tr;
+        }
+      }
       ctx.fillStyle = 'rgba(16, 21, 27, 0.35)';
       ctx.fillRect(0, 0, W, H);
       for (var k = 0; k < circles; k++) {
