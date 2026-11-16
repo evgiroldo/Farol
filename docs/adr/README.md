@@ -36,10 +36,11 @@
 | [0031](0031-solve-dont-show.md) | Solve, don't show | Amended by 0035 |
 | [0032](0032-detection-details.md) | Detection details: suspicion sequence, "normal" work, incident limits | Amended by 0039 |
 | [0033](0033-cause-test-statistics.md) | Cause test statistics | Amended by 0040 |
-| [0034](0034-pause-safety-details.md) | Pause safety details | Accepted |
+| [0034](0034-pause-safety-details.md) | Pause safety details | Amended by 0041 |
 | [0035](0035-results-settings-alerts-and-lifecycle.md) | Test results, settings, alert filters, disk and sentinel lifecycle | Accepted |
 | [0036](0036-anonymous-reports-sent-by-the-user.md) | Anonymous reports sent by the user | Accepted |
 | [0037](0037-process-sampler-caches.md) | Process sampler caches | Accepted |
 | [0038](0038-platform-scope-reconsidered.md) | Platform scope reconsidered: no Intel, no older macOS (for now) | Accepted |
 | [0039](0039-quieter-detection-and-sampling.md) | Quieter detection and slower sampling | Accepted |
 | [0040](0040-cause-test-results-and-scope.md) | Cause test results: WindowServer in 1.0, Spotlight later | Accepted |
+| [0041](0041-apple-services-during-a-cause-test.md) | Apple services attributed to an app during a cause test | Accepted |
