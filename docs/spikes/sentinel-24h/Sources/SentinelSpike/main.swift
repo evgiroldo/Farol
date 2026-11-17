@@ -3,7 +3,7 @@
 // It contains every part the real sentinel will have, so its cost is realistic:
 // FarolCore counters + detector + SQLite history, the memory-pressure monitor,
 // daemon queries through /bin/ps via posix_spawn (ADR 0021), a 60 s in-memory ring with
-// the top 20 apps every 10 s, the notifications framework (loaded, no prompt), an XPC
+// the top 20 apps (ADR 0042: every 10 s under suspicion, else 60 s), the notifications framework (loaded, no prompt), an XPC
 // listener, and a menu bar item with a menu.
 //
 // Every 5 minutes it appends its own cost to
@@ -17,6 +17,7 @@ import UserNotifications
 let supportDir = FileManager.default.homeDirectoryForCurrentUser
     .appending(path: "Library/Application Support/FarolSpike", directoryHint: .isDirectory)
 let csvURL = supportDir.appending(path: "measure.csv")
+let breakdownURL = supportDir.appending(path: "breakdown.csv")
 
 // MARK: - Daemon watching through /bin/ps
 
@@ -108,8 +109,11 @@ final class Engine: NSObject, NSXPCListenerDelegate {
     var psCalls = 0
     var daemonHighEvents = 0
 
-    var ring: [[ProcessDelta]] = []  // top 20 apps, every 20 s, last 60 s (ADR 0039)
-    let ringInterval = 20.0
+    // Top 20 apps, last 60 s (ADR 0042): every 10 s while the Mac looks busy, otherwise every 60 s.
+    var ring: [(time: Double, deltas: [ProcessDelta])] = []
+    let ringSuspiciousInterval = 10.0
+    let ringQuietInterval = 60.0
+    var lastMemoryRelief = 0.0
     let incidentInterval = 5.0
     var lastIncidentSample = 0.0
     var lastProcessSnapshot: ProcessSnapshot?
@@ -135,41 +139,59 @@ final class Engine: NSObject, NSXPCListenerDelegate {
     func start() {
         let tick = DispatchSource.makeTimerSource(queue: queue)
         tick.schedule(deadline: .now(), repeating: 2.0, leeway: .milliseconds(500))
-        tick.setEventHandler { [unowned self] in self.idleTick() }
+        tick.setEventHandler { [unowned self] in self.timed("tick") { self.idleTick() } }
         tick.resume()
         timers.append(tick)
     }
 
     private var uptime: Double { ProcessInfo.processInfo.systemUptime }
 
+    // MARK: Cost accounting (investigation after run 4): thread CPU time per component.
+
+    var cost: [String: UInt64] = [:]
+    var lastOwnCPU = 0.0
+
+    func timed<T>(_ key: String, _ body: () -> T) -> T {
+        let start = clock_gettime_nsec_np(CLOCK_THREAD_CPUTIME_ID)
+        defer { cost[key, default: 0] += clock_gettime_nsec_np(CLOCK_THREAD_CPUTIME_ID) - start }
+        return body()
+    }
+
     func idleTick() {
-        guard let now = SystemCounters.read(memoryPressure: monitor.current) else { return }
+        guard let now = timed("counters", { SystemCounters.read(memoryPressure: monitor.current) }) else { return }
         defer { lastSnapshot = now }
         guard let previous = lastSnapshot else { return }
-        let load = SystemLoad(from: previous, to: now, cores: SystemCounters.coreCount)
+        let load = timed("counters") { SystemLoad(from: previous, to: now, cores: SystemCounters.coreCount) }
         minuteLoads.append(load)
 
-        // Daemons: rescan PIDs every 5 min; query on suspicion (at most every 10 s) or every 30 s.
+        // Daemons (ADR 0043): rescan PIDs every 15 min; query on suspicion (at most every 10 s) or every 60 s.
         let t = uptime
-        if t - lastDiscovery > 300 { daemons = discoverDaemons(); lastDiscovery = t }
+        if t - lastDiscovery > 900 {
+            daemons = timed("discovery") { discoverDaemons() }
+            lastDiscovery = t
+        }
         let suspicious = load.busyCores > (detector.baseline ?? load.busyCores) + 0.3
-        if t - lastDaemonQuery >= 30 || (suspicious && t - lastDaemonQuery >= 10) { queryDaemons(at: t) }
+        if t - lastDaemonQuery >= 60 || (suspicious && t - lastDaemonQuery >= 10) { timed("ps") { queryDaemons(at: t) } }
 
-        // Ring: top 20 apps every 20 s, only outside incidents (an incident samples on its own).
-        if incidentID == nil, t - lastRingSample >= ringInterval { sampleRing(at: t) }
+        // Ring: only outside incidents (an incident samples on its own); fast only under suspicion.
+        let ringInterval = suspicious ? ringSuspiciousInterval : ringQuietInterval
+        if incidentID == nil, t - lastRingSample >= ringInterval { timed("ring") { sampleRing(at: t) } }
+        if t - lastMemoryRelief >= 3600 { relieveMemory(at: t) }
 
-        if let event = detector.observe(load, at: t) {
-            switch event {
-            case .started(let reasons): beginIncident(reasons)
-            case .ended: endIncident()
+        if let event = timed("detector", { detector.observe(load, at: t) }) {
+            timed("incident") {
+                switch event {
+                case .started(let reasons): beginIncident(reasons)
+                case .ended: endIncident()
+                }
             }
         }
         if incidentID != nil, t - lastIncidentSample >= incidentInterval {
-            incidentTick()
+            timed("incident") { incidentTick() }
             lastIncidentSample = t
         }
 
-        if Date().timeIntervalSince1970 - minuteStart >= 60 { flushMinute() }
+        if Date().timeIntervalSince1970 - minuteStart >= 60 { timed("minute-db") { flushMinute() } }
         if Date().timeIntervalSince(lastReport) >= 300 { report() }
         if Date().timeIntervalSince(lastPurge) >= 3600 {
             try? store.purge(olderThan: Date().timeIntervalSince1970 - 7 * 86_400)
@@ -195,8 +217,9 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         if let previous = lastProcessSnapshot {
             let top = ProcessSampler.deltas(from: previous, to: snapshot)
                 .sorted { $0.cpuSeconds > $1.cpuSeconds }.prefix(20)
-            ring.append(Array(top))
-            if ring.count > 3 { ring.removeFirst() }
+            let now = Date().timeIntervalSince1970
+            ring.append((now, Array(top)))
+            ring.removeAll { now - $0.time > 60 }
         }
         lastProcessSnapshot = snapshot
         lastRingSample = t
@@ -210,15 +233,13 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         incidentStarted = now
         incidents += 1
         // The ring becomes the incident's first samples.
-        let records = ring.enumerated().flatMap { index, deltas in
-            deltas.map { IncidentProcessRecord(time: now - Double(ring.count - index) * ringInterval, delta: $0) }
-        }
+        let records = ring.flatMap { entry in entry.deltas.map { IncidentProcessRecord(time: entry.time, delta: $0) } }
         try? store.append(records, incident: id)
         onStateChange?(true)
     }
 
     func incidentTick() {
-        // Detailed sampling every 5 s (ADR 0039), capped at 10 minutes.
+        // Detailed sampling every 5 s (ADRs 0039, 0042), capped at 10 minutes.
         let snapshot = sampler.snapshot()
         if let previous = lastProcessSnapshot, Date().timeIntervalSince1970 - incidentStarted < 600 {
             let now = Date().timeIntervalSince1970
@@ -232,6 +253,12 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         }
     }
 
+    /// Returns memory the allocator kept after a peak (ADR 0042). Run 3: 21 MB footprint, 7.5 MB live.
+    func relieveMemory(at t: Double) {
+        malloc_zone_pressure_relief(nil, 0)
+        lastMemoryRelief = t
+    }
+
     func endIncident() {
         guard let id = incidentID else { return }
         try? store.append(pendingRecords, incident: id)
@@ -239,6 +266,7 @@ final class Engine: NSObject, NSXPCListenerDelegate {
         try? store.endIncident(id, at: Date().timeIntervalSince1970)
         incidentID = nil
         ring.removeAll()  // samples from before the incident are stale now
+        relieveMemory(at: uptime)
         onStateChange?(false)
     }
 
@@ -291,6 +319,18 @@ final class Engine: NSObject, NSXPCListenerDelegate {
             handle.write(Data(line.utf8))
             try? handle.close()
         }
+        let keys = ["tick", "counters", "discovery", "ps", "ring", "detector", "incident", "minute-db"]
+        let parts = keys.map { String(format: "%.2f", Double(cost[$0, default: 0]) / 1e6) }.joined(separator: ",")
+        let breakdown = String(
+            format: "%@,%.1f,%.2f,%@,%d\n", ISO8601DateFormatter().string(from: Date()), elapsed, (ownCPU - lastOwnCPU) * 1e3,
+            parts, incidentID == nil ? 0 : 1)
+        if let handle = try? FileHandle(forWritingTo: breakdownURL) {
+            handle.seekToEndOfFile()
+            handle.write(Data(breakdown.utf8))
+            try? handle.close()
+        }
+        cost.removeAll(keepingCapacity: true)
+        lastOwnCPU = ownCPU
         lastCPU = totalCPU
         lastWakeups = wakeups
         lastReportUptime = ProcessInfo.processInfo.systemUptime
@@ -313,6 +353,12 @@ if !FileManager.default.fileExists(atPath: csvURL.path) {
         contents: Data(
             "time,elapsed_s,mode,cpu_pct_interval,child_cpu_pct_total,footprint_mb,wakeups_per_s,ps_calls,incidents,daemon_high_events\n"
                 .utf8))
+}
+
+if !FileManager.default.fileExists(atPath: breakdownURL.path) {
+    FileManager.default.createFile(
+        atPath: breakdownURL.path,
+        contents: Data("time,interval_s,own_cpu_ms,tick_ms,counters_ms,discovery_ms,ps_ms,ring_ms,detector_ms,incident_ms,minute_db_ms,in_incident\n".utf8))
 }
 
 let app = NSApplication.shared

@@ -96,8 +96,8 @@ public struct ProcessSampler: Sendable {
 
     private let timebase: Double
     /// Seconds between full cache rebuilds (names can change after `execve`; a reused PID
-    /// may become readable).
-    public var refreshInterval: Double = 60
+    /// may become readable). Five minutes, so a once-a-minute snapshot reuses the cache (ADR 0043).
+    public var refreshInterval: Double = 300
     var known: [pid_t: Known] = [:]
     var unreadable: Set<pid_t> = []
     private var lastRefresh: UInt64 = 0

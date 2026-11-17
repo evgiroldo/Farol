@@ -1,6 +1,6 @@
 # 0039. Quieter detection and slower sampling
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0042
 - Date: 2026-11-16
 - Amends: 0021 (ring cadence), 0032 (incident sampling cadence), detector defaults
 

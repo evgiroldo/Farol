@@ -1,6 +1,6 @@
 # 0037. Process sampler caches
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0043
 - Date: 2026-11-15
 - Amends: 0030 (cost of a process snapshot)
 
