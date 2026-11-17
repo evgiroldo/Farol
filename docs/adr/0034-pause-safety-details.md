@@ -1,6 +1,6 @@
 # 0034. Pause safety details
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0041
 - Date: 2026-11-15
 - Amends: 0023 (watchdog, protections), 0027 (what "whole app" pauses)
 

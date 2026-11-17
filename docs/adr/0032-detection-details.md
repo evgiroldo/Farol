@@ -1,6 +1,6 @@
 # 0032. Detection details: suspicion sequence, "normal" work, incident limits
 
-- Status: Accepted
+- Status: Accepted; amended by ADR 0039
 - Date: 2026-11-15
 - Amends: 0021 (trigger logic), 0024 (normal macOS work), 0018 (history size)
 

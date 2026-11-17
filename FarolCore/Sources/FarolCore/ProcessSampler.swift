@@ -80,8 +80,27 @@ public struct ProcessDelta: Sendable, Equatable {
 
 /// Reads per-process counters with `proc_pid_rusage` and `proc_pidinfo`. Only processes
 /// owned by the current user are readable without privileges (ADR 0007); others are skipped.
+///
+/// `snapshot()` caches what does not change during a process's life (identity, name, owner)
+/// and the PIDs it cannot read, so a repeated snapshot costs about one system call per
+/// readable process (ADR 0037). Every cached entry is checked against the kernel's start time
+/// on each read, so a reused PID is never mistaken for the old process; the caches are
+/// rebuilt every `refreshInterval` seconds.
 public struct ProcessSampler: Sendable {
+    struct Known: Sendable, Equatable {
+        let startAbstime: UInt64
+        let identity: ProcessIdentity
+        let name: String
+        let uid: uid_t
+    }
+
     private let timebase: Double
+    /// Seconds between full cache rebuilds (names can change after `execve`; a reused PID
+    /// may become readable). Five minutes, so a once-a-minute snapshot reuses the cache (ADR 0043).
+    public var refreshInterval: Double = 300
+    var known: [pid_t: Known] = [:]
+    var unreadable: Set<pid_t> = []
+    private var lastRefresh: UInt64 = 0
 
     public init() {
         var tb = mach_timebase_info_data_t()
@@ -89,41 +108,75 @@ public struct ProcessSampler: Sendable {
         timebase = Double(tb.numer) / Double(tb.denom) / 1e9
     }
 
-    /// Samples every readable process except the caller.
-    public func snapshot() -> ProcessSnapshot {
+    /// Samples every readable process except the caller, using the caches.
+    public mutating func snapshot() -> ProcessSnapshot {
         let time = Self.nowMicroseconds()
+        if Double(time &- lastRefresh) / 1e6 >= refreshInterval {
+            known.removeAll(keepingCapacity: true)
+            unreadable.removeAll(keepingCapacity: true)
+            lastRefresh = time
+        }
         let me = getpid()
-        var samples: [ProcessSample] = []
         let pids = Self.allPIDs()
-        samples.reserveCapacity(pids.count / 2)
-        for pid in pids where pid > 0 && pid != me {
-            if let s = sample(pid: pid) { samples.append(s) }
+        var samples: [ProcessSample] = []
+        samples.reserveCapacity(known.isEmpty ? pids.count / 2 : known.count + 16)
+        for pid in pids where pid > 0 && pid != me && !unreadable.contains(pid) {
+            guard let usage = Self.usage(of: pid) else {
+                if errno == EPERM { unreadable.insert(pid) }
+                continue
+            }
+            let entry: Known
+            if let cached = known[pid], cached.startAbstime == usage.ri_proc_start_abstime {
+                entry = cached
+            } else {
+                guard let fresh = Self.identity(of: pid, startAbstime: usage.ri_proc_start_abstime) else { continue }
+                entry = fresh
+                known[pid] = fresh
+            }
+            samples.append(makeSample(entry, usage))
         }
         return ProcessSnapshot(time: time, processes: samples)
     }
 
-    /// Samples one process, or `nil` if it exited or is not readable.
+    /// Samples one process without any cache, or `nil` if it exited or is not readable.
+    /// Use this when acting on a process (it always reflects the kernel's current state).
     public func sample(pid: pid_t) -> ProcessSample? {
+        guard let usage = Self.usage(of: pid),
+            let entry = Self.identity(of: pid, startAbstime: usage.ri_proc_start_abstime)
+        else { return nil }
+        return makeSample(entry, usage)
+    }
+
+    private func makeSample(_ entry: Known, _ usage: rusage_info_v6) -> ProcessSample {
+        ProcessSample(
+            identity: entry.identity,
+            name: entry.name,
+            uid: entry.uid,
+            cpuSeconds: Double(usage.ri_user_time &+ usage.ri_system_time) * timebase,
+            diskBytesWritten: usage.ri_diskio_byteswritten,
+            footprint: usage.ri_phys_footprint
+        )
+    }
+
+    private static func usage(of pid: pid_t) -> rusage_info_v6? {
         var usage = rusage_info_v6()
         let rc = withUnsafeMutablePointer(to: &usage) {
             $0.withMemoryRebound(to: rusage_info_t?.self, capacity: 1) {
                 proc_pid_rusage(pid, RUSAGE_INFO_V6, $0)
             }
         }
-        guard rc == 0 else { return nil }
-        // Name, owner and start time come from one call, so they describe the same process.
+        return rc == 0 ? usage : nil
+    }
+
+    /// Name, owner and start time come from one call, so they describe the same process.
+    private static func identity(of pid: pid_t, startAbstime: UInt64) -> Known? {
         var info = proc_bsdinfo()
         let size = Int32(MemoryLayout<proc_bsdinfo>.size)
         guard proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, size) == size else { return nil }
         let start = UInt64(info.pbi_start_tvsec) * 1_000_000 + UInt64(info.pbi_start_tvusec)
-        return ProcessSample(
-            identity: ProcessIdentity(pid: pid, startTime: start),
-            name: Self.name(from: info),
-            uid: info.pbi_uid,
-            cpuSeconds: Double(usage.ri_user_time &+ usage.ri_system_time) * timebase,
-            diskBytesWritten: usage.ri_diskio_byteswritten,
-            footprint: usage.ri_phys_footprint
-        )
+        return Known(
+            startAbstime: startAbstime, identity: ProcessIdentity(pid: pid, startTime: start),
+            name: name(from: info), uid: info.pbi_uid)
     }
 
     /// Activity between two snapshots. Idle processes are omitted. A process missing from

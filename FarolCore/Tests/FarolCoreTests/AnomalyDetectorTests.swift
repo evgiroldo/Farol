@@ -29,12 +29,19 @@ struct AnomalyDetectorTests {
         #expect(feed(&d, calm(200)).isEmpty)
     }
 
-    @Test func sustainedSpikeStartsAfterTwoSamples() {
+    @Test func sustainedSpikeStartsAfterTenSeconds() {
         var d = AnomalyDetector()
-        let events = feed(&d, calm(10) + Array(repeating: load(3.1), count: 3))
+        let events = feed(&d, calm(10) + Array(repeating: load(3.1), count: 6))
         #expect(events.count == 1)
-        #expect(events.first?.0 == 22)  // second abnormal sample
+        #expect(events.first?.0 == 28)  // fifth abnormal sample, 10 s after the first
         #expect(events.first?.1 == .started(reasons: .cpu))
+    }
+
+    /// Regression for the 24-hour measurement (ADR 0039): half of 122 incidents lasted under a
+    /// minute on a Mac that never felt slow. A burst shorter than 10 s must not start one.
+    @Test func burstShorterThanTenSecondsIsIgnored() {
+        var d = AnomalyDetector()
+        #expect(feed(&d, calm(10) + Array(repeating: load(3.1), count: 4) + calm(10)).isEmpty)
     }
 
     @Test func singleBlipIsIgnored() {
@@ -43,10 +50,10 @@ struct AnomalyDetectorTests {
     }
 
     /// Regression for the sentinel spike: a load switching on/off every 4 s split into
-    /// two incidents. With hysteresis it must stay one incident.
+    /// two incidents. Once started, with hysteresis it must stay one incident.
     @Test func onOffLoadStaysOneIncident() {
         var d = AnomalyDetector()
-        var values = calm(20)
+        var values = calm(20) + Array(repeating: load(3.1), count: 6)
         for i in 0..<30 { values.append(load((i / 2) % 2 == 0 ? 3.1 : 0.9)) }  // 60 s of 4 s on/off
         values += calm(10)
         let events = feed(&d, values)
@@ -70,7 +77,7 @@ struct AnomalyDetectorTests {
 
     @Test func incidentLastsAtLeastMinimumDuration() {
         var d = AnomalyDetector()
-        let events = feed(&d, calm(5) + Array(repeating: load(3), count: 2) + calm(30))
+        let events = feed(&d, calm(5) + Array(repeating: load(3), count: 5) + calm(30))
         guard events.count == 2, case .ended(let duration) = events[1].1 else {
             Issue.record("expected start and end, got \(events)")
             return
@@ -85,7 +92,7 @@ struct AnomalyDetectorTests {
     ])
     func nonCPUReasonsStartIncidents(_ abnormal: SystemLoad, _ reason: AnomalyReason) {
         var d = AnomalyDetector()
-        let events = feed(&d, calm(5) + [abnormal, abnormal])
+        let events = feed(&d, calm(5) + Array(repeating: abnormal, count: 5))
         #expect(events.map(\.1) == [.started(reasons: reason)])
     }
 
@@ -109,7 +116,7 @@ struct AnomalyDetectorTests {
         // Burst right after wake (t = 20…48) is ignored; a burst after it is detected.
         let during = feed(&d, Array(repeating: load(4), count: 15), start: 20)
         #expect(during.isEmpty)
-        let after = feed(&d, Array(repeating: load(4), count: 3), start: 60)
+        let after = feed(&d, Array(repeating: load(4), count: 6), start: 60)
         #expect(after.map(\.1) == [.started(reasons: .cpu)])
     }
 }

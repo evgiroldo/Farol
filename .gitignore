@@ -22,3 +22,6 @@ docs/spikes/**/probe
 # 24-hour spike build outputs
 docs/spikes/sentinel-24h/.build/
 docs/spikes/sentinel-24h/FarolSpike.app/
+
+# Attribution spike v2 outputs
+docs/spikes/attribution-v2/data/

@@ -14,7 +14,7 @@ Farol is a free, open-source app for Macs with Apple silicon. When your Mac feel
 2. **You open Farol and see the answer first.** One card, one sentence, one button. For example:
    - *"Chrome is slowing down your Mac."* → **Fix** — Farol restarts Chrome the normal way (it asks you to save anything first, and your tabs come back).
    - *"Your Mac is organizing your photos."* → It explains that this is normal after adding many photos, and offers to tell you if it goes on for too long.
-3. **When Farol isn't sure, it checks before it blames.** Sometimes an app makes *macOS* work harder — for example, by making the system redraw the screen all the time. Then Farol says *"Slack may be slowing down your Mac. We're not sure yet."* and offers **Pause to confirm**: with your OK, it pauses the app three times for 3 seconds (about 40 seconds in total) and watches whether your Mac calms down. Nothing is closed. If it's confirmed, you get the Fix button; if the result is unclear, Farol says so.
+3. **When Farol isn't sure, it checks before it blames.** Sometimes an app makes *macOS* work harder — for example, by making the system redraw the screen all the time. Then Farol says *"Slack may be slowing down your Mac. We're not sure yet."* and offers **Pause to confirm**: with your OK, it pauses the app three times for 3 seconds (about 36 seconds in total) and watches whether your Mac calms down. Nothing is closed. If it's confirmed, you get the Fix button; if the result is unclear, Farol says so.
 
 Graphs, numbers and process lists are still there under **Details**, for anyone who wants them.
 
@@ -52,7 +52,7 @@ Some problems can't be tested by pausing an app — heat, too little memory, a f
 **Version 1.0** ([ADR 0029](docs/adr/0029-scope-of-version-1.md), [ADR 0031](docs/adr/0031-solve-dont-show.md)):
 - The menu bar helper with alerts and a short history of slowdowns.
 - The answer-first window with the Fix and Pause to confirm buttons.
-- Cause testing for the two classic cases: the system process that draws the screen (WindowServer) and the one that indexes files for search (Spotlight).
+- Cause testing for the classic case: the system process that draws the screen (WindowServer). Spotlight, which indexes files for search, is explained but not tested yet: its work comes in bursts that a short pause cannot measure reliably.
 - Heat, battery and free-space information, including the "disk full in N days" warning.
 - Plain explanations of about 20 common macOS processes.
 - "Was this helpful?" after every fix, and optional anonymous reports.

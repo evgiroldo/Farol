@@ -36,8 +36,8 @@ public struct AnomalyDetector: Sendable {
         public var stayMargin = 0.5
         /// Swapout rate (pages per second) that counts as swapping. 64 pages of 16 KB is 1 MB/s.
         public var swapoutsPerSecond = 64.0
-        /// Consecutive abnormal samples needed to start an incident.
-        public var enterSamples = 2
+        /// Consecutive abnormal samples needed to start an incident (5 samples 2 s apart = 10 s, ADR 0039).
+        public var enterSamples = 5
         /// Consecutive calm samples needed to end an incident.
         public var exitSamples = 5
         /// Minimum incident duration in seconds.
