@@ -12,6 +12,10 @@ if pgrep -x FarolSpike >/dev/null; then
     echo "FarolSpike is already running. Stop it first: pkill -x FarolSpike"
     exit 1
 fi
+if pgrep -x Farol >/dev/null; then
+    echo "The Farol preview is running and would disturb the measurement. Quit it first: pkill -x Farol"
+    exit 1
+fi
 
 archive="$data/previous-before-$run"
 mkdir -p "$archive"

@@ -16,14 +16,14 @@
           "what": "Draws everything you see on the screen, for every app.",
           "normal": "It works harder for a moment when you move windows, play video or connect another display.",
           "typical": null,
-          "action": "If it stays busy, an app may be redrawing its window all the time. Farol shows which apps are writing the most to disk."
+          "action": "If it stays busy, an app may be redrawing its window all the time. Farol can pause apps one by one to find which."
         },
         "pt-BR": {
           "name": "Desenho da tela",
           "what": "Desenha tudo o que você vê na tela, para todos os apps.",
           "normal": "Trabalha mais por alguns instantes quando você move janelas, assiste a um vídeo ou conecta outro monitor.",
           "typical": null,
-          "action": "Se continuar ocupado, algum app pode estar redesenhando a janela sem parar. O Farol mostra quais apps estão gravando mais no disco."
+          "action": "Se continuar ocupado, algum app pode estar redesenhando a janela sem parar. O Farol pode pausar os apps um a um para descobrir qual."
         }
       }
     },
