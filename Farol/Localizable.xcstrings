@@ -1,0 +1,296 @@
+{
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "%@ may be slowing down your Mac": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ pode estar deixando seu Mac lento"
+          }
+        }
+      }
+    },
+    "Busiest apps over the last %@": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps que mais trabalharam nos últimos %@"
+          }
+        }
+      }
+    },
+    "Details": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalhes"
+          }
+        }
+      }
+    },
+    "Earlier, your Mac was slow from %@ to %@.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mais cedo, seu Mac ficou lento das %1$@ às %2$@."
+          }
+        }
+      }
+    },
+    "Farol could not start": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Farol não conseguiu iniciar"
+          }
+        }
+      }
+    },
+    "Farol: your Mac is busy": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farol: seu Mac está ocupado"
+          }
+        }
+      }
+    },
+    "Farol: your Mac is running normally": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farol: seu Mac está funcionando normalmente"
+          }
+        }
+      }
+    },
+    "Farol: your Mac is slow": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farol: seu Mac está lento"
+          }
+        }
+      }
+    },
+    "If you don't need it right now, quitting it the usual way may help.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se você não precisa dele agora, fechá-lo do jeito de sempre pode ajudar."
+          }
+        }
+      }
+    },
+    "It is moving data to the disk to make room, and that slows everything down. Closing apps or windows you don't need frees memory.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ele está passando dados para o disco para abrir espaço, e isso deixa tudo mais lento. Fechar apps ou janelas que você não está usando libera memória."
+          }
+        }
+      }
+    },
+    "It slows itself down to cool off.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ele diminui o ritmo sozinho para esfriar."
+          }
+        }
+      }
+    },
+    "Its list of macOS processes is missing or damaged. Please reinstall Farol.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A lista de processos do macOS que ele usa está faltando ou danificada. Instale o Farol de novo."
+          }
+        }
+      }
+    },
+    "Many apps are each doing a little; none of them stands out. See Details.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vários apps estão fazendo um pouco cada um; nenhum se destaca. Veja os Detalhes."
+          }
+        }
+      }
+    },
+    "Measured. The first number is the share of your Mac's total processing power; the second is the memory the app uses.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medido. O primeiro número é a parte de toda a capacidade de processamento do seu Mac; o segundo é a memória que o app usa."
+          }
+        }
+      }
+    },
+    "Measured: %@ is using %@ of your Mac's processing power.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medido: %1$@ está usando %2$@ da capacidade de processamento do seu Mac."
+          }
+        }
+      }
+    },
+    "Measured: %@ is using the most memory (%@).": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medido: %1$@ é o app que mais usa memória (%2$@)."
+          }
+        }
+      }
+    },
+    "Measured: %@ of one processor core.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medido: %@ de um núcleo do processador."
+          }
+        }
+      }
+    },
+    "Measured: macOS reports a high temperature level.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medido: o macOS informa temperatura alta."
+          }
+        }
+      }
+    },
+    "Measuring… the first numbers appear in a few seconds.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medindo… os primeiros números aparecem em alguns segundos."
+          }
+        }
+      }
+    },
+    "Nothing is using much of its power right now.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada está usando muito da capacidade dele agora."
+          }
+        }
+      }
+    },
+    "Preview 0.1 · it explains, it does not change anything": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévia 0.1 · explica, não muda nada"
+          }
+        }
+      }
+    },
+    "Quit": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sair"
+          }
+        }
+      }
+    },
+    "We're not sure yet. It is using much more of your Mac's power than anything else.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda não temos certeza. Ele está usando muito mais da capacidade do seu Mac do que qualquer outro app."
+          }
+        }
+      }
+    },
+    "Your Mac is busy": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Mac está ocupado"
+          }
+        }
+      }
+    },
+    "Your Mac is busy: %@ is working": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Mac está ocupado: %@ está trabalhando"
+          }
+        }
+      }
+    },
+    "Your Mac is running normally": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Mac está funcionando normalmente"
+          }
+        }
+      }
+    },
+    "Your Mac is running out of memory": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Mac está ficando sem memória"
+          }
+        }
+      }
+    },
+    "Your Mac is slow: %@ is working hard": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Mac está lento: %@ está trabalhando muito"
+          }
+        }
+      }
+    },
+    "Your Mac is too hot": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Mac está quente demais"
+          }
+        }
+      }
+    }
+  }
+}

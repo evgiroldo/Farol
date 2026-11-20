@@ -8,8 +8,8 @@ cd "$(dirname "$0")/.."
 
 fail=0
 pattern='import Network|URLSession|NWConnection|NWListener|NWPathMonitor|CFSocket|CFStream|\bsocket\(|\bconnect\(|getaddrinfo|gethostbyname'
-if grep -rnE "$pattern" --include='*.swift' FarolCore/Sources; then
-    echo "error: networking API found in FarolCore sources (ADR 0009)"
+if grep -rnE "$pattern" --include='*.swift' FarolCore/Sources Farol; then
+    echo "error: networking API found in Farol or FarolCore sources (ADR 0009)"
     fail=1
 fi
 

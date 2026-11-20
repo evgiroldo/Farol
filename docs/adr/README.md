@@ -19,7 +19,7 @@
 | [0014](0014-distribution-and-tooling.md) | Distribution, build and quality tooling | Amended by 0019, 0030 |
 | [0015](0015-documentation-language.md) | English for code and docs; app in English and Portuguese | Accepted |
 | [0016](0016-on-device-ai.md) | On-device AI for explanations | Deferred |
-| [0017](0017-two-process-model.md) | Two processes: sentinel and app | Amended by 0011, 0025 |
+| [0017](0017-two-process-model.md) | Two processes: sentinel and app | Amended by 0011, 0025, 0044 |
 | [0018](0018-identity-history-store-retention.md) | Bundle identifier, history store and retention | Amended by 0019, 0032 |
 | [0019](0019-corrections-after-first-review.md) | Corrections after the first independent review | Accepted |
 | [0020](0020-plain-language-positioning.md) | Plain-language positioning | Amended by 0003 |
@@ -31,7 +31,7 @@
 | [0026](0026-versions-updates-and-lifecycle.md) | Versions, updates and the sentinel lifecycle | Amended by 0035 |
 | [0027](0027-grouping-processes-into-apps.md) | Grouping processes into apps | Amended by 0034 |
 | [0028](0028-budget-policy.md) | Resource budget policy | Accepted |
-| [0029](0029-scope-of-version-1.md) | Scope of version 1.0 | Amended by 0030, 0035, 0036, 0040 |
+| [0029](0029-scope-of-version-1.md) | Scope of version 1.0 | Amended by 0030, 0035, 0036, 0040, 0044 |
 | [0030](0030-clarifications-after-second-review.md) | Clarifications after the second review | Amended by 0037 |
 | [0031](0031-solve-dont-show.md) | Solve, don't show | Amended by 0035 |
 | [0032](0032-detection-details.md) | Detection details: suspicion sequence, "normal" work, incident limits | Amended by 0039 |
@@ -46,3 +46,5 @@
 | [0041](0041-apple-services-during-a-cause-test.md) | Apple services attributed to an app during a cause test | Accepted |
 | [0042](0042-ring-under-suspicion-and-memory-relief.md) | Ring sampled under suspicion; allocator memory returned | Accepted |
 | [0043](0043-slower-background-checks.md) | Slower background checks while the Mac is quiet | Accepted |
+| [0044](0044-preview-version-0-1.md) | Preview version 0.1 | Amended by 0045 |
+| [0045](0045-work-farol-cannot-see.md) | Work Farol cannot see directly | Accepted |
