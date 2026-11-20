@@ -46,4 +46,5 @@
 | [0041](0041-apple-services-during-a-cause-test.md) | Apple services attributed to an app during a cause test | Accepted |
 | [0042](0042-ring-under-suspicion-and-memory-relief.md) | Ring sampled under suspicion; allocator memory returned | Accepted |
 | [0043](0043-slower-background-checks.md) | Slower background checks while the Mac is quiet | Accepted |
-| [0044](0044-preview-version-0-1.md) | Preview version 0.1 | Accepted |
+| [0044](0044-preview-version-0-1.md) | Preview version 0.1 | Amended by 0045 |
+| [0045](0045-work-farol-cannot-see.md) | Work Farol cannot see directly | Accepted |

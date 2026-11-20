@@ -1,6 +1,6 @@
 # 0044. Preview version 0.1
 
-- Status: Accepted
+- Status: Amended by 0045
 - Date: 2026-11-17
 - Amends: 0017 (two processes), 0029 (what comes before 1.0)
 
